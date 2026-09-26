@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0e1116">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ΓΚΙΣΕ 360°">
+<title>ΓΚΙΣΕ 360°</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/favicon-32.png">
+<link rel="apple-touch-icon" href="icons/apple-180.png">
+<style>
+:root{
+  --bg:#0e1116; --bg2:#151a22; --card:#1a2029; --card2:#212834; --line:#2c3441;
+  --tx:#f4f6f8; --tx2:#b8c0cc; --tx3:#8591a1;
+  --red:#e4222f; --red2:#ff4d58; --redbg:rgba(228,34,47,.14);
+  --cyan:#35c3e8; --gold:#f2b632; --blue:#5b8cff; --violet:#a78bfa;
+  --r:14px; --sh:0 6px 24px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.5 "Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif}
+body{padding-bottom:env(safe-area-inset-bottom)}
+a{color:var(--cyan)}
+button,input,select,textarea{font:inherit;color:inherit}
+header{position:sticky;top:0;z-index:30;background:linear-gradient(180deg,#12161d,#0e1116);border-bottom:1px solid var(--line);padding:10px 16px 0;padding-top:max(10px,env(safe-area-inset-top))}
+.hrow{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.logo{width:46px;height:46px;flex:none}
+.brand h1{margin:0;font-size:22px;letter-spacing:.5px}
+.brand h1 b{color:var(--red)}
+.brand .sub{font-size:12.5px;color:var(--tx2)}
+.brand .copy{font-size:11px;color:var(--tx3)}
+.hsp{flex:1}
+.hbtn{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:7px 11px;cursor:pointer;font-size:13px}
+.hbtn:hover{border-color:var(--red)}
+nav.tabs{display:flex;gap:4px;overflow-x:auto;margin-top:10px;scrollbar-width:none}
+nav.tabs::-webkit-scrollbar{display:none}
+nav.tabs button{flex:none;background:none;border:none;border-bottom:3px solid transparent;padding:9px 12px;cursor:pointer;color:var(--tx2);font-weight:600;white-space:nowrap}
+nav.tabs button.on{color:#fff;border-bottom-color:var(--red)}
+main{max-width:1180px;margin:0 auto;padding:18px 16px 60px}
+section.pg{display:none} section.pg.on{display:block}
+h2{font-size:21px;margin:4px 0 12px} h3{font-size:17px;margin:18px 0 8px}
+.muted{color:var(--tx2)} .small{font-size:12.5px} .tiny{font-size:11.5px;color:var(--tx3)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px}
+.grid{display:grid;gap:12px}
+.g2{grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+.g3{grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}
+.g4{grid-template-columns:repeat(auto-fill,minmax(170px,1fr))}
+.hero{background:radial-gradient(1200px 300px at 0 0,rgba(228,34,47,.25),transparent),var(--bg2);border:1px solid var(--line);border-radius:18px;padding:22px}
+.hero h2{font-size:26px;margin:0 0 6px}
+.sbox{display:flex;gap:8px;margin-top:12px}
+.sbox input{flex:1;background:#0b0e13;border:1px solid var(--line);border-radius:12px;padding:13px 14px;font-size:16px;outline:none}
+.sbox input:focus{border-color:var(--red)}
+.btn{background:var(--red);border:none;border-radius:10px;padding:9px 14px;color:#fff;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px;text-decoration:none;font-size:14px}
+.btn:hover{background:var(--red2)}
+.btn.g{background:var(--card2);border:1px solid var(--line);color:var(--tx)}
+.btn.g:hover{border-color:var(--red)}
+.btn.sm{padding:6px 10px;font-size:13px}
+.btn.cy{background:#16414f;border:1px solid #1f6a80}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{background:var(--card2);border:1px solid var(--line);border-radius:999px;padding:5px 11px;font-size:13px;cursor:pointer;white-space:nowrap}
+.chip.on,.chip:hover{border-color:var(--red);background:var(--redbg)}
+.tile{cursor:pointer;transition:.15s;display:flex;gap:10px;align-items:flex-start}
+.tile:hover{border-color:var(--red);transform:translateY(-1px)}
+.tile .ic{font-size:26px;line-height:1}
+.tile b{display:block}
+.svc{cursor:pointer;display:flex;flex-direction:column;gap:6px}
+.svc:hover{border-color:var(--red)}
+.svc .t{font-weight:700}
+.badges{display:flex;flex-wrap:wrap;gap:4px}
+.bdg{font-size:11.5px;border-radius:6px;padding:2px 7px;background:#10151c;border:1px solid var(--line);color:var(--tx2)}
+.bdg.online{border-color:#1f6a80;color:#8fdcf0}
+.bdg.kep{border-color:#7a2a31;color:#ffb3b8}
+.bdg.mykeplive{border-color:#5a4a9a;color:#cbbcff}
+.bdg.ypiresia{border-color:#6b5a1d;color:#f5d37a}
+.bdg.cost{border-color:#444;color:#ddd}
+.notice{background:rgba(242,182,50,.08);border:1px solid rgba(242,182,50,.35);border-radius:12px;padding:10px 12px;font-size:13px;color:#f3dca0}
+.notice.ok{background:rgba(53,195,232,.1);border-color:rgba(53,195,232,.45);color:#c9f1fb}
+.notice.r{background:var(--redbg);border-color:rgba(228,34,47,.45);color:#ffd0d3}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.sp{flex:1}
+label.f{display:flex;flex-direction:column;gap:4px;font-size:12.5px;color:var(--tx2)}
+.inp,input.inp,select.inp,textarea.inp{background:#0b0e13;border:1px solid var(--line);border-radius:9px;padding:8px 10px;color:var(--tx);width:100%;font-size:14px}
+.inp:focus{outline:none;border-color:var(--red)}
+textarea.inp{min-height:110px;resize:vertical}
+.fgrid{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(200px,1fr))}
+table.t{width:100%;border-collapse:collapse;font-size:13.5px}
+table.t th,table.t td{border-bottom:1px solid var(--line);padding:7px 6px;text-align:left;vertical-align:top}
+table.t th{color:var(--tx2);font-weight:600;font-size:12.5px}
+.tw{overflow-x:auto}
+/* modal */
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:50;display:none;align-items:flex-start;justify-content:center;padding:4vh 12px;overflow:auto}
+.ov.on{display:flex}
+.modal{background:var(--bg2);border:1px solid var(--line);border-radius:18px;max-width:820px;width:100%;box-shadow:var(--sh)}
+.mh{display:flex;gap:10px;align-items:flex-start;padding:16px 16px 10px;border-bottom:1px solid var(--line)}
+.mh h3{margin:0;font-size:19px}
+.mb{padding:14px 16px 18px}
+.x{background:none;border:1px solid var(--line);border-radius:9px;cursor:pointer;padding:4px 10px;font-size:16px}
+.kv{display:grid;grid-template-columns:130px 1fr;gap:6px 12px;font-size:14px}
+.kv dt{color:var(--tx2)}
+.kv dd{margin:0}
+ol.steps{padding-left:22px;margin:6px 0} ol.steps li{margin:4px 0}
+.chk{list-style:none;padding:0;margin:6px 0}
+.chk li{display:flex;gap:8px;align-items:flex-start;padding:4px 0}
+.chk input{accent-color:var(--red);width:17px;height:17px;margin-top:2px}
+.chk li.done span{text-decoration:line-through;color:var(--tx3)}
+mark{background:rgba(228,34,47,.35);color:#fff;border-radius:3px;padding:0 2px}
+.stat{display:flex;flex-direction:column}
+.stat .n{font-size:26px;font-weight:800}
+.st{font-size:12px;border-radius:999px;padding:2px 9px;font-weight:700;white-space:nowrap}
+.st.s0{background:#2a3140;color:#d6dbe4}
+.st.s1{background:#173a4a;color:#8fdcf0}
+.st.s2{background:#4a3a12;color:#f5d37a}
+.st.s3{background:#2e2552;color:#cbbcff}
+.st.s4{background:#3d1419;color:#ffb3b8}
+.st.s5{background:#20242c;color:#8591a1}
+.days{font-weight:800}
+.days.over{color:var(--red2)} .days.soon{color:var(--gold)} .days.ok{color:var(--cyan)}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#000;border:1px solid var(--red);padding:10px 16px;border-radius:10px;z-index:99;display:none}
+.wiz{display:flex;flex-direction:column;gap:8px}
+.wstep{display:flex;gap:10px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.wstep .n{background:var(--red);color:#fff;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-weight:800;flex:none;font-size:13px}
+.hide{display:none!important}
+footer{border-top:1px solid var(--line);padding:16px;text-align:center;color:var(--tx3);font-size:12px}
+/* printable document */
+#printArea{display:none}
+@media print{
+  body{background:#fff;color:#000}
+  header,main,footer,.ov,.toast{display:none!important}
+  #printArea{display:block!important;color:#000;font-family:"Times New Roman",serif;font-size:13pt}
+}
+.doc{background:#fff;color:#000;font-family:"Times New Roman",serif;padding:28px;border-radius:6px;font-size:14px;line-height:1.45}
+.doc h1{text-align:center;font-size:20px;margin:0 0 4px}
+.doc .c{text-align:center}
+.doc table{width:100%;border-collapse:collapse}
+.doc td{border:1px solid #000;padding:5px 6px;font-size:13px}
+.doc td.l{background:#eee;width:28%;font-weight:bold}
+.doc .body{border:1px solid #000;padding:10px;min-height:120px;white-space:pre-wrap}
+.doc .fn{font-size:11px}
+html,body{font-size:calc(15px * var(--fs,1))}
+.news{border-left:3px solid var(--red);padding:10px 12px}
+.news .d{font-size:12px;color:var(--tx3)}
+.st.open{background:#3d1419;color:#ffb3b8}.st.pay{background:#173a4a;color:#8fdcf0}.st.soon{background:#4a3a12;color:#f5d37a}.st.done{background:#20242c;color:#8591a1}.st.perm{background:#2e2552;color:#cbbcff}
+/* μεγάλες οθόνες / τάμπλετ οριζόντια: αξιοποίηση όλου του πλάτους */
+@media (min-width:1100px){main{max-width:1500px}.g2{grid-template-columns:repeat(auto-fill,minmax(360px,1fr))}}
+/* κινητό/τάμπλετ σε ΟΡΙΖΟΝΤΙΑ θέση: συμπαγής κεφαλίδα, περισσότερες στήλες */
+@media (orientation:landscape) and (max-height:600px){
+  header{padding:4px 12px 0;padding-left:max(12px,env(safe-area-inset-left));padding-right:max(12px,env(safe-area-inset-right))}
+  .hrow{flex-wrap:nowrap;gap:8px}
+  .logo{width:32px;height:32px}
+  .brand h1{font-size:17px}
+  .brand .sub,.brand .copy{display:none}
+  nav.tabs{margin-top:2px}
+  nav.tabs button{padding:6px 10px;font-size:13.5px}
+  main{max-width:none;padding:10px max(14px,env(safe-area-inset-right)) 40px max(14px,env(safe-area-inset-left))}
+  .g2{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+  #formWrap{grid-template-columns:1fr 1.2fr!important}
+  .hero{padding:12px}.hero h2{font-size:19px}
+  .ov{padding:2vh 10px}.modal{max-width:96vw}
+  .kv{grid-template-columns:130px 1fr!important}
+  .hbtn .lbl{display:none}
+}
+@media (max-width:640px){
+  .brand h1{font-size:19px}
+  .kv{grid-template-columns:1fr}
+  .kv dt{margin-top:6px}
+  .hero{padding:16px} .hero h2{font-size:21px}
+  .g2,#formWrap{grid-template-columns:1fr!important}
+  .hbtn .lbl{display:none}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="hrow">
+    <svg class="logo" viewBox="0 0 64 64" aria-hidden="true">
+      <defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff4d58"/><stop offset="1" stop-color="#b3121d"/></linearGradient></defs>
+      <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#lg)"/>
+      <path d="M12 26 L32 14 L52 26 Z" fill="#fff"/>
+      <rect x="12" y="26" width="40" height="3.5" fill="#fff"/>
+      <rect x="16" y="31" width="4.5" height="15" fill="#fff"/><rect x="25" y="31" width="4.5" height="15" fill="#fff"/>
+      <rect x="34.5" y="31" width="4.5" height="15" fill="#fff"/><rect x="43.5" y="31" width="4.5" height="15" fill="#fff"/>
+      <rect x="10" y="47" width="44" height="4" rx="1" fill="#fff"/>
+      <circle cx="49" cy="15" r="9" fill="#0e1116" stroke="#fff" stroke-width="2"/>
+      <text x="49" y="19" font-size="10" font-weight="900" text-anchor="middle" fill="#fff" font-family="Arial">360</text>
+    </svg>
+    <div class="brand">
+      <h1><b>ΓΚΙΣΕ</b> 360°</h1>
+      <div class="sub">ΚΕΠ · Τράπεζα · Εφορία · ΕΦΚΑ · Πολεοδομία · Κτηματολόγιο · Δικαστήρια · Δήμος · Μεταφορές · ΔΥΠΑ — όλα σε μία εφαρμογή</div>
+      <div class="copy">© by Chronis Makris</div>
+    </div>
+    <div class="hsp"></div>
+    <button class="hbtn" id="fsDown" title="Μικρότερα γράμματα">A−</button>
+    <button class="hbtn" id="fsUp" title="Μεγαλύτερα γράμματα">A+</button>
+    <button class="hbtn" id="fullBtn" title="Πλήρης οθόνη">⛶ <span class="lbl">Πλήρης οθόνη</span></button>
+    <button class="hbtn hide" id="installBtn">⬇ <span class="lbl">Εγκατάσταση</span></button>
+    <button class="hbtn" data-go="profile">👤 <span class="lbl">Προφίλ</span></button>
+  </div>
+  <nav class="tabs" id="tabs">
+    <button data-go="home" class="on">🏠 Αρχική</button>
+    <button data-go="agency">🏢 Γκισέ φορέων</button>
+    <button data-go="services">📋 Υπηρεσίες</button>
+    <button data-go="tools">🧮 Εργαλεία</button>
+    <button data-go="news">📰 Ενημερώσεις</button>
+    <button data-go="life">❓ Οδηγός ζωής</button>
+    <button data-go="forms">📝 Έντυπα</button>
+    <button data-go="cases">🗂️ Υποθέσεις</button>
+    <button data-go="office">💼 Ιδιωτικό ΚΕΠ</button>
+    <button data-go="dates">📅 Προθεσμίες</button>
+    <button data-go="contacts">📞 Επαφές &amp; Links</button>
+    <button data-go="profile">👤 Προφίλ</button>
+  </nav>
+</header>
+
+<main>
+<!-- ============ HOME ============ -->
+<section class="pg on" id="pg-home">
+  <div class="hero">
+    <h2>Τι θέλεις να κάνεις σήμερα;</h2>
+    <div class="muted">Γράψε με απλά λόγια — π.χ. «διαβατήριο», «ακατάσχετος λογαριασμός», «ένσημα», «άδεια δόμησης», «διαταγή πληρωμής», «μεταβίβαση αυτοκινήτου».</div>
+    <div class="sbox"><input id="homeQ" placeholder="🔎 Αναζήτηση σε όλες τις υπηρεσίες…" autocomplete="off"><button class="btn" id="homeGo">Βρες</button></div>
+    <div class="chips" style="margin-top:10px" id="popChips"></div>
+  </div>
+  <div class="notice" style="margin-top:12px">ℹ️ Η εφαρμογή λειτουργεί ως <b>το γκισέ κάθε υπηρεσίας στην τσέπη σου</b> (ΚΕΠ, τράπεζα, εφορία, ΕΦΚΑ, πολεοδομία, κτηματολόγιο, δικαστήρια, δήμος, μεταφορές, ΔΥΠΑ): σου λέει τι χρειάζεσαι, σου ετοιμάζει τα έντυπα, παρακολουθεί τις υποθέσεις και σε στέλνει <b>κατευθείαν στην επίσημη ηλεκτρονική υπηρεσία</b> (gov.gr, ΑΑΔΕ, ΕΦΚΑ…) όπου την ολοκληρώνεις με τους κωδικούς TaxisNet — όπως ακριβώς θα έκανε ο υπάλληλος στο γκισέ. Ελέγχους (IBAN/ΑΦΜ/ΑΜΚΑ/RF) και υπολογισμούς (φόρος, δόση δανείου, ΦΜΑ, ΦΠΑ, προθεσμίες) τους κάνει εδώ, αμέσως. Δεν υποβάλλει η ίδια αιτήσεις και δεν κάνει τραπεζικές συναλλαγές.</div>
+  <div id="homeNews"></div>
+  <h3>🏢 Διάλεξε γκισέ</h3>
+  <div class="grid g4" id="homeAg"></div>
+  <h3>Κατηγορίες</h3>
+  <div class="grid g3" id="catTiles"></div>
+  <h3>Τα 4 «κλειδιά» για να τα κάνεις όλα online</h3>
+  <div class="grid g2" id="keysBox"></div>
+  <div class="grid g4" style="margin-top:14px" id="homeStats"></div>
+</section>
+
+<!-- ============ AGENCY ============ -->
+<section class="pg" id="pg-agency">
+  <h2>🏢 Γκισέ φορέων</h2>
+  <div class="muted small" style="margin-bottom:12px">Μπες στο «γκισέ» που χρειάζεσαι: όλες οι υπηρεσίες του, τα επίσημα online κανάλια, τηλέφωνα και εργαλεία που κάνουν τη δουλειά εδώ.</div>
+  <div class="grid g2" id="agTiles"></div>
+  <div id="agOut"></div>
+</section>
+
+<!-- ============ TOOLS ============ -->
+<section class="pg" id="pg-tools">
+  <h2>🧮 Εργαλεία — κάν' το εδώ</h2>
+  <div class="muted small" style="margin-bottom:12px">Έλεγχοι και υπολογισμοί που κάνει ο υπάλληλος στο γκισέ — τρέχουν τοπικά στη συσκευή σου, χωρίς να στέλνεται τίποτα πουθενά.</div>
+  <div class="grid g2" id="toolsBox"></div>
+</section>
+
+<!-- ============ NEWS ============ -->
+<section class="pg" id="pg-news">
+  <div class="row"><h2 style="margin:0">📰 Ενημερώσεις: επιδόματα &amp; παροχές</h2><div class="sp"></div><span class="tiny" id="newsAsOf"></span></div>
+  <div class="notice" style="margin:10px 0">Τι τρέχει τώρα: ανοιχτές αιτήσεις, πληρωμές, νέα προγράμματα. Οι πληροφορίες προέρχονται από έρευνα στις επίσημες πηγές την ημερομηνία που φαίνεται· πάντα επιβεβαίωσε στον επίσημο σύνδεσμο.</div>
+  <div class="row" style="margin-bottom:10px"><input class="inp" id="newsQ" placeholder="🔎 π.χ. θέρμανσης, κοινωνικός τουρισμός, ενοίκιο" style="max-width:340px"><div class="chips" id="newsF"></div></div>
+  <div id="akatBox"></div>
+  <div class="grid g2" id="newsList"></div>
+</section>
+
+<!-- ============ SERVICES ============ -->
+<section class="pg" id="pg-services">
+  <div class="row"><h2 style="margin:0">📋 Κατάλογος υπηρεσιών</h2><div class="sp"></div><span class="muted small" id="svcCount"></span></div>
+  <div class="sbox"><input id="svcQ" placeholder="🔎 Αναζήτηση (χωρίς τόνους, συνώνυμα, π.χ. «αμκα», «δίπλωμα», «κληρονομια»)…" autocomplete="off"></div>
+  <div class="row" style="margin:10px 0">
+    <select class="inp" id="svcCat" style="max-width:320px"></select>
+    <select class="inp" id="svcCh" style="max-width:260px">
+      <option value="">Όλα τα κανάλια</option>
+      <option value="online">💻 Γίνεται online</option>
+      <option value="kep">🏛️ Γίνεται στο ΚΕΠ</option>
+      <option value="mykeplive">🎥 Γίνεται μέσω myKEPlive</option>
+      <option value="ypiresia">🏢 Μόνο σε αρμόδια υπηρεσία</option>
+    </select>
+    <label class="row small"><input type="checkbox" id="svcFav" style="accent-color:var(--red)"> ★ Μόνο αγαπημένα</label>
+  </div>
+  <div class="grid g2" id="svcList"></div>
+</section>
+
+<!-- ============ LIFE EVENTS ============ -->
+<section class="pg" id="pg-life">
+  <h2>❓ Οδηγός «γεγονότα ζωής»</h2>
+  <div class="muted" style="margin-bottom:12px">Διάλεξε τι σου συμβαίνει — παίρνεις <b>πλήρη λίστα ενεργειών με σειρά</b>, όπως θα σου την έδινε ο υπάλληλος του ΚΕΠ.</div>
+  <div class="grid g3" id="lifeTiles"></div>
+  <div id="lifeOut" style="margin-top:16px"></div>
+</section>
+
+<!-- ============ FORMS ============ -->
+<section class="pg" id="pg-forms">
+  <h2>📝 Έντυπα &amp; αιτήσεις</h2>
+  <div class="notice">Τα έντυπα συμπληρώνονται αυτόματα από το <b>Προφίλ</b>. Εκτυπωμένη Υπεύθυνη Δήλωση/Εξουσιοδότηση χρειάζεται <b>βεβαίωση γνησίου υπογραφής</b> (ΚΕΠ/Αστυνομία) — ή την εκδίδεις <b>ψηφιακά και δωρεάν</b> στο <a href="https://www.gov.gr/ipiresies/polites-kai-kathemerinoteta/upeuthune-delose-kai-exousiodotese" target="_blank" rel="noopener">gov.gr (docs.gov.gr)</a> με ισχύ ίδια με το γνήσιο υπογραφής.</div>
+  <div class="row" style="margin:12px 0">
+    <select class="inp" id="formType" style="max-width:360px">
+      <option value="yd">Υπεύθυνη Δήλωση (άρθρο 8 Ν.1599/1986)</option>
+      <option value="ex">Εξουσιοδότηση</option>
+      <option value="ai">Αίτηση προς δημόσια υπηρεσία</option>
+      <option value="ay">Αίτηση – Υπεύθυνη Δήλωση</option>
+      <option value="en">Ένσταση / Αίτηση επανεξέτασης</option>
+    </select>
+    <select class="inp" id="formTpl" style="max-width:360px"></select>
+  </div>
+  <div class="grid" style="grid-template-columns:minmax(280px,1fr) minmax(300px,1.2fr)" id="formWrap">
+    <div class="card" id="formFields"></div>
+    <div>
+      <div class="row" style="margin-bottom:8px">
+        <button class="btn" id="fPrint">🖨️ Εκτύπωση / PDF</button>
+        <button class="btn g" id="fWord">📄 Word</button>
+        <button class="btn g" id="fCopy">📋 Αντιγραφή κειμένου</button>
+        <a class="btn cy" href="https://docs.gov.gr/" target="_blank" rel="noopener">🌐 Ψηφιακά στο gov.gr</a>
+      </div>
+      <div id="formPreview"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CASES ============ -->
+<section class="pg" id="pg-cases">
+  <div class="row"><h2 style="margin:0">🗂️ Υποθέσεις / αιτήσεις σε εξέλιξη</h2><div class="sp"></div>
+    <button class="btn" id="caseNew">＋ Νέα υπόθεση</button>
+    <button class="btn g sm" id="caseCsv">⬇ Excel (CSV)</button>
+    <button class="btn g sm" id="casePrint">🖨️ Λίστα</button>
+  </div>
+  <div class="muted small" style="margin:6px 0 10px">Παρακολούθησε κάθε αίτηση: δικαιολογητικά (checklist), αρ. πρωτοκόλλου, κατάσταση, προθεσμίες. Για ιδιωτικό ΚΕΠ: πελάτης, αμοιβή, πληρωμή.</div>
+  <div class="grid g4" id="caseStats"></div>
+  <div class="row" style="margin:12px 0">
+    <input class="inp" id="caseQ" placeholder="🔎 Αναζήτηση υπόθεσης/πελάτη/πρωτοκόλλου" style="max-width:340px">
+    <div class="chips" id="caseFilt"></div>
+  </div>
+  <div id="caseList"></div>
+</section>
+
+<!-- ============ PRIVATE OFFICE ============ -->
+<section class="pg" id="pg-office">
+  <h2>💼 Ιδιωτικό ΚΕΠ / Γραφείο διεκπεραίωσης</h2>
+  <div class="muted small">Για επαγγελματίες που εξυπηρετούν πολίτες επί αμοιβή (λογιστικά γραφεία, γραφεία διεκπεραίωσης, «ιδιωτικά ΚΕΠ»): πελατολόγιο, τιμοκατάλογος, προσφορές, έσοδα.</div>
+  <div class="notice r" style="margin-top:10px">⚠️ Για ενέργειες με τους κωδικούς TaxisNet του πελάτη απαιτείται <b>ρητή εξουσιοδότηση</b> (π.χ. ψηφιακή από gov.gr ή ορισμός εκπροσώπου/λογιστή στο myAADE). Μην κρατάτε κωδικούς πελατών. Το «Σημείωμα» της εφαρμογής <b>δεν είναι φορολογικό παραστατικό</b> — η απόδειξη εκδίδεται από ΦΗΜ/πάροχο/myDATA.</div>
+  <div class="grid g4" style="margin-top:12px" id="offStats"></div>
+  <h3>👥 Πελάτες <button class="btn sm" id="cliNew" style="margin-left:8px">＋ Νέος πελάτης</button> <button class="btn g sm" id="cliCsv">⬇ CSV</button></h3>
+  <input class="inp" id="cliQ" placeholder="🔎 Αναζήτηση πελάτη (όνομα/ΑΦΜ/τηλ.)" style="max-width:340px;margin-bottom:8px">
+  <div class="tw"><table class="t" id="cliTable"></table></div>
+  <h3>💶 Τιμοκατάλογος υπηρεσιών</h3>
+  <div class="muted small" style="margin-bottom:6px">Ενδεικτικά εύρη αγοράς (έρευνα σε ιδιωτικά γραφεία) — όρισε τη δική σου τιμή· χρησιμοποιείται αυτόματα στις νέες υποθέσεις.</div>
+  <div class="row" style="margin-bottom:8px"><button class="btn sm" id="priceAdd">＋ Προσθήκη</button><button class="btn g sm" id="pricePrint">🖨️ Εκτύπωση τιμοκαταλόγου</button></div>
+  <div class="tw"><table class="t" id="priceTable"></table></div>
+</section>
+
+<!-- ============ DATES ============ -->
+<section class="pg" id="pg-dates">
+  <h2>📅 Προθεσμίες &amp; υπενθυμίσεις</h2>
+  <div class="grid g2">
+    <div class="card">
+      <h3 style="margin-top:0">🔔 Οι υπενθυμίσεις μου (λήξεις εγγράφων κ.λπ.)</h3>
+      <div class="fgrid">
+        <label class="f">Τι λήγει / τι πρέπει να γίνει<input class="inp" id="remT" list="remSug" placeholder="π.χ. Λήξη διαβατηρίου"></label>
+        <label class="f">Ημερομηνία<input class="inp" type="date" id="remD"></label>
+        <label class="f">Υπενθύμιση πριν (ημέρες)<input class="inp" type="number" id="remB" value="30" min="0"></label>
+      </div>
+      <datalist id="remSug"><option>Λήξη διαβατηρίου</option><option>Λήξη ταυτότητας</option><option>Λήξη άδειας οδήγησης</option><option>ΚΤΕΟ αυτοκινήτου</option><option>Ασφάλεια αυτοκινήτου</option><option>Τέλη κυκλοφορίας</option><option>Λήξη άδειας διαμονής</option><option>Λήξη γνωμάτευσης ΚΕΠΑ</option><option>Δόση ΕΝΦΙΑ</option><option>Δόση ρύθμισης</option><option>Λήξη κάρτας ανεργίας (ανανέωση)</option></datalist>
+      <div class="row" style="margin-top:8px"><button class="btn" id="remAdd">＋ Προσθήκη</button><button class="btn g sm" id="remIcs">📆 Εξαγωγή στο ημερολόγιο (.ics)</button></div>
+      <div id="remList" style="margin-top:10px"></div>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0">🗓️ Ετήσιο ημερολόγιο προθεσμιών</h3>
+      <div class="muted small">Επαναλαμβανόμενες προθεσμίες (ενδεικτικές — κάθε χρόνο επιβεβαίωσε στην επίσημη ανακοίνωση).</div>
+      <div id="dlList" style="margin-top:8px"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONTACTS ============ -->
+<section class="pg" id="pg-contacts">
+  <h2>📞 Επαφές, τηλέφωνα &amp; επίσημα links</h2>
+  <div class="grid g2" id="contactsBox"></div>
+</section>
+
+<!-- ============ PROFILE ============ -->
+<section class="pg" id="pg-profile">
+  <h2>👤 Το προφίλ μου</h2>
+  <div class="notice">🔒 Τα στοιχεία αποθηκεύονται <b>μόνο στη συσκευή σου</b> (localStorage) — δεν στέλνονται πουθενά. Χρησιμοποιούνται για αυτόματη συμπλήρωση εντύπων. <b>Μην αποθηκεύεις κωδικούς.</b></div>
+  <div class="card" style="margin-top:12px"><div class="fgrid" id="profFields"></div>
+    <div class="row" style="margin-top:12px"><button class="btn" id="profSave">💾 Αποθήκευση</button></div>
+  </div>
+  <h3>🗄️ Δεδομένα εφαρμογής</h3>
+  <div class="row">
+    <button class="btn g" id="bkOut">⬇ Αντίγραφο ασφαλείας (JSON)</button>
+    <label class="btn g">⬆ Επαναφορά<input type="file" id="bkIn" accept=".json" hidden></label>
+    <button class="btn g" id="wipe">🗑️ Διαγραφή όλων</button>
+  </div>
+  <div class="tiny" style="margin-top:8px">Η διαγραφή ζητά 2 κλικ επιβεβαίωσης.</div>
+</section>
+</main>
+
+<footer>ΓΚΙΣΕ 360° · ενημερωτικό εργαλείο — οι πληροφορίες προέρχονται από επίσημες πηγές (gov.gr, ΑΑΔΕ, ΕΦΚΑ, ΔΥΠΑ, ΟΠΕΚΑ κ.ά.) αλλά αλλάζουν· επιβεβαίωνε πάντα στον επίσημο σύνδεσμο. © by Chronis Makris</footer>
+
+<div class="ov" id="ov"><div class="modal"><div class="mh"><div style="flex:1" id="mTitle"></div><button class="x" id="mClose">✕</button></div><div class="mb" id="mBody"></div></div></div>
+<div class="toast" id="toast"></div>
+<div id="printArea"></div>
+
+<script src="data.js"></script>
+<script>
+"use strict";
+/* ================= helpers ================= */
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const norm=s=>String(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/ς/g,'σ');
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const today=()=>{const d=new Date();d.setHours(0,0,0,0);return d};
+const fmtD=s=>{if(!s)return'';const [y,m,d]=s.split('-');return `${d}/${m}/${y}`};
+const eur=n=>(Number(n)||0).toLocaleString('el-GR',{minimumFractionDigits:2,maximumFractionDigits:2})+' €';
+function toast(m){const t=$('#toast');t.textContent=m;t.style.display='block';clearTimeout(toast._t);toast._t=setTimeout(()=>t.style.display='none',2200)}
+function dl(name,data,type){const b=new Blob([data],{type});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500)}
+function csv(rows){return '﻿'+rows.map(r=>r.map(v=>{v=String(v==null?'':v);return /[;"\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v}).join(';')).join('\r\n')}
+function printHTML(html){$('#printArea').innerHTML=html;window.print()}
+function wordDoc(name,html){dl(name,'<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word"><head><meta charset="utf-8"><style>body{font-family:"Times New Roman";font-size:12pt} table{border-collapse:collapse;width:100%} td{border:1px solid #000;padding:4px} td.l{background:#eee;font-weight:bold;width:28%} .c{text-align:center} h1{text-align:center;font-size:16pt} .body{border:1px solid #000;padding:8px;white-space:pre-wrap} .fn{font-size:9pt}</style></head><body>'+html+'</body></html>','application/msword')}
+
+/* ================= storage ================= */
+const KEY='kep360';
+let S={profile:{},cases:[],clients:[],prices:null,rem:[],fav:[],checks:{},notes:{}};
+try{Object.assign(S,JSON.parse(localStorage.getItem(KEY)||'{}'))}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){toast('⚠️ Δεν ήταν δυνατή η αποθήκευση')}}
+
+/* ================= data ================= */
+const CATS={
+ tautotita:['🆔','Ταυτότητα & Διαβατήριο'], pistopoiitika:['📜','Πιστοποιητικά & Βεβαιώσεις'], oikogeneia:['👪','Οικογένεια & Ληξιαρχείο'],
+ psifiaka:['📱','Ψηφιακές υπηρεσίες gov.gr'], trapeza:['🏦','Τράπεζα'], ydom:['🏗️','Πολεοδομία & Δασαρχείο'], dikaiosyni:['⚖️','Δικαιοσύνη & Δικαστήρια'], ktimatologio:['🗺️','Κτηματολόγιο'],
+ metanastefsi:['🌍','Ιθαγένεια & Αλλοδαποί'], stratologia:['🎖️','Στρατολογία & Εκλογές'], forologia:['💶','Φορολογία (ΑΑΔΕ)'],
+ oximata:['🚗','Οχήματα & Μεταφορές'], akinita:['🏠','Ακίνητα'], epixeiriseis:['🏢','Επιχειρήσεις'],
+ asfalisi:['🛡️','Ασφάλιση & Συντάξεις (e-ΕΦΚΑ)'], ergasia:['💼','Εργασία & Ανεργία (ΔΥΠΑ)'], pronoia:['🤝','Πρόνοια & Επιδόματα'],
+ ygeia:['🩺','Υγεία'], ekpaidefsi:['🎓','Εκπαίδευση'], dimotika:['🏛️','Δήμος'], energeia:['⚡','Ρεύμα & Φυσικό αέριο'], nero:['💧','Νερό & Αποχέτευση'], tilepikoinonies:['📡','Τηλεφωνία & Internet'], allo:['📁','Λοιπά']
+};
+const CH={online:'💻 Online',kep:'🏛️ ΚΕΠ',mykeplive:'🎥 myKEPlive',ypiresia:'🏢 Υπηρεσία'};
+const SVC=[].concat(window.KEP_A||[],window.KEP_B||[],window.KEP_C||[],window.KEP_D||[],window.KEP_E||[],window.KEP_F||[],window.KEP_G||[],window.KEP_H||[],window.KEP_J||[]).filter(s=>s&&s.id&&s.title);
+(function dedupe(){const seen={};for(const s of SVC){if(seen[s.id])s.id+='_'+uid();seen[s.id]=1;if(!CATS[s.cat])s.cat='allo';s.channels=s.channels||[];s.docs=s.docs||[];s.steps=s.steps||[];s.kw=s.kw||[];s._n=norm([s.title,s.kw.join(' '),s.what,s.who].join(' '));s._t=norm(s.title)}})();
+const byId=id=>SVC.find(s=>s.id===id);
+
+/* ================= search ================= */
+const SYN={'χαθηκε':'απωλεια','εχασα':'απωλεια','κλεψαν':'κλοπη απωλεια','διπλωμα':'αδεια οδηγησησ','αυτοκινητο':'οχημα','αμαξι':'οχημα','μηχανη':'οχημα μοτοσυκλετα','συνταξη':'συνταξιοδοτηση','ενσημα':'ασφαλιστικο ιστορικο','λεφτα':'επιδομα','παιδι':'τεκνο παιδιου','γαμοσ':'γαμου','πεθανε':'θανατου κληρονομια','σπιτι':'ακινητο κατοικια','ενοικιο':'μισθωση','ανεργοσ':'ανεργια','ταξη':'','κωδικοι':'taxisnet','ταξισ':'taxisnet','ρευμα':'ηλεκτρικο κοτ','πασο':'ακαδημαικη ταυτοτητα'};
+function search(q){
+  const nq=norm(q).trim(); if(!nq) return SVC.slice();
+  let terms=nq.split(/\s+/).filter(Boolean); const extra=[];
+  terms.forEach(t=>{for(const k in SYN){if(t.startsWith(k.slice(0,Math.max(4,k.length-1)))&&SYN[k])extra.push(...SYN[k].split(' '))}});
+  const out=[];
+  for(const s of SVC){let sc=0,hit=0;
+    for(const t of terms){const st=t.length>4?t.slice(0,t.length-1):t;
+      if(s._t.includes(st)){sc+=10;hit++} else if(s._n.includes(st)){sc+=4;hit++}}
+    for(const t of extra){const st=t.length>4?t.slice(0,t.length-1):t; if(s._n.includes(st))sc+=2}
+    if(hit===terms.length)sc+=8;
+    if(sc>0)out.push([sc,s])}
+  return out.sort((a,b)=>b[0]-a[0]).map(x=>x[1]);
+}
+function hl(text,q){text=esc(text);const ts=norm(q).split(/\s+/).filter(t=>t.length>2);if(!ts.length)return text;
+  const n=norm(text);let marks=[];ts.forEach(t=>{const st=t.length>4?t.slice(0,-1):t;let i=n.indexOf(st);while(i>-1){marks.push([i,i+st.length]);i=n.indexOf(st,i+1)}});
+  if(!marks.length)return text;marks.sort((a,b)=>a[0]-b[0]);let r='',p=0;for(const[a,b]of marks){if(a<p)continue;r+=text.slice(p,a)+'<mark>'+text.slice(a,b)+'</mark>';p=b}return r+text.slice(p)}
+
+/* ================= nav ================= */
+function go(p){$$('section.pg').forEach(x=>x.classList.toggle('on',x.id==='pg-'+p));$$('#tabs button').forEach(b=>b.classList.toggle('on',b.dataset.go===p));
+  window.scrollTo(0,0);try{history.replaceState(null,'','#'+p)}catch(e){}
+  ({home:rHome,news:rNews,agency:rAg,tools:rTools,services:rSvc,life:rLife,forms:rForm,cases:rCases,office:rOffice,dates:rDates,contacts:rContacts,profile:rProfile}[p]||(()=>{}))()}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-go]');if(b){go(b.dataset.go)}});
+
+/* ================= service card & modal ================= */
+function badges(s){return `<div class="badges">${s.channels.map(c=>`<span class="bdg ${c}">${CH[c]||c}</span>`).join('')}${s.cost?`<span class="bdg cost">💶 ${esc(s.cost.length>38?s.cost.slice(0,36)+'…':s.cost)}</span>`:''}</div>`}
+function card(s,q){const fav=S.fav.includes(s.id);return `<div class="card svc" data-svc="${s.id}"><div class="row"><span style="font-size:20px">${CATS[s.cat][0]}</span><span class="t" style="flex:1">${hl(s.title,q||'')}</span>${fav?'<span style="color:var(--gold)">★</span>':''}</div><div class="muted small">${hl(s.what||'',q||'')}</div>${badges(s)}</div>`}
+document.addEventListener('click',e=>{const c=e.target.closest('[data-svc]');const inner=e.target.closest('a,button');if(c&&(!inner||inner===c))openSvc(c.dataset.svc)});
+function openModal(title,body){$('#mTitle').innerHTML=title;$('#mBody').innerHTML=body;$('#ov').classList.add('on');document.body.style.overflow='hidden'}
+function closeModal(){$('#ov').classList.remove('on');document.body.style.overflow=''}
+$('#mClose').onclick=closeModal;$('#ov').addEventListener('click',e=>{if(e.target.id==='ov')closeModal()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
+function svcHTML(s,forPrint){
+  const ck=S.checks[s.id]||{};
+  return `<dl class="kv">
+   <dt>Τι είναι</dt><dd>${esc(s.what)}</dd>
+   ${s.who?`<dt>Ποιος / πότε</dt><dd>${esc(s.who)}</dd>`:''}
+   <dt>Κόστος</dt><dd>${esc(s.cost||'—')}</dd>
+   <dt>Χρόνος</dt><dd>${esc(s.time||'—')}</dd>
+   <dt>Πού γίνεται</dt><dd>${s.channels.map(c=>`<span class="bdg ${c}">${CH[c]||c}</span>`).join(' ')||'—'}</dd>
+   ${s.auth?`<dt>Ταυτοποίηση</dt><dd>${esc(s.auth)}</dd>`:''}
+  </dl>
+  ${s.docs.length?`<h3>📎 Δικαιολογητικά ${forPrint?'':'<span class="tiny">(τσέκαρε ό,τι έχεις έτοιμο)</span>'}</h3><ul class="chk">${s.docs.map((d,i)=>`<li class="${ck[i]?'done':''}">${forPrint?'☐':`<input type="checkbox" data-ck="${s.id}|${i}" ${ck[i]?'checked':''}>`}<span>${esc(d)}</span></li>`).join('')}</ul>`:''}
+  ${s.steps.length?`<h3>👣 Βήματα</h3><ol class="steps">${s.steps.map(x=>`<li>${esc(x)}</li>`).join('')}</ol>`:''}
+  ${s.note?`<div class="notice" style="margin-top:10px">💡 ${esc(s.note)}</div>`:''}
+  ${s.url?`<div class="tiny" style="margin-top:10px">Επίσημος σύνδεσμος: ${esc(s.url)}</div>`:''}
+  ${s.src&&s.src!==s.url?`<div class="tiny">Πηγή: ${esc(s.src)}</div>`:''}`;
+}
+function openSvc(id){const s=byId(id);if(!s)return;const fav=S.fav.includes(id);
+  openModal(`<div class="tiny">${CATS[s.cat][0]} ${CATS[s.cat][1]}</div><h3>${esc(s.title)}</h3>`,
+   `<div class="row" style="margin-bottom:12px">
+     ${s.url?`<a class="btn" href="${esc(s.url)}" target="_blank" rel="noopener">🌐 Κάν' το τώρα (επίσημη υπηρεσία)</a>`:''}
+     ${s.channels.includes('mykeplive')?`<a class="btn g" href="https://mykeplive.gov.gr/" target="_blank" rel="noopener">🎥 myKEPlive</a>`:''}
+     ${s.channels.includes('kep')?`<a class="btn g" href="https://rantevou.kep.gov.gr/" target="_blank" rel="noopener">📅 Ραντεβού ΚΕΠ</a>`:''}
+     <button class="btn g" id="mCase">🗂️ Νέα υπόθεση</button>
+     <button class="btn g" id="mFav">${fav?'★ Αφαίρεση':'☆ Αγαπημένο'}</button>
+     <button class="btn g" id="mPrint">🖨️ Οδηγίες</button>
+   </div>${svcHTML(s)}`);
+  $('#mFav').onclick=()=>{S.fav=fav?S.fav.filter(x=>x!==id):S.fav.concat(id);save();openSvc(id)};
+  $('#mCase').onclick=()=>{closeModal();editCase(null,id)};
+  $('#mPrint').onclick=()=>printHTML(`<div class="doc"><h1>${esc(s.title)}</h1><div class="c">${esc(CATS[s.cat][1])} · ΓΚΙΣΕ 360°</div><hr>${svcHTML(s,true).replace(/class="bdg[^"]*"/g,'')}</div>`);
+}
+document.addEventListener('change',e=>{const t=e.target;if(t.dataset.ck){const[id,i]=t.dataset.ck.split('|');S.checks[id]=S.checks[id]||{};S.checks[id][i]=t.checked;save();t.closest('li').classList.toggle('done',t.checked)}});
+
+/* ================= HOME ================= */
+const POP=['αλλαγή παρόχου ρεύματος','φορητότητα αριθμού','διαρροή νερού','ακατάσχετος λογαριασμός','άδεια δόμησης','ρύθμιση οφειλών','διαταγή πληρωμής','διαβατήριο','ταυτότητα','υπεύθυνη δήλωση','ΑΜΚΑ','κωδικοί TaxisNet','πιστοποιητικό οικογενειακής κατάστασης','επίδομα παιδιού','άδεια οδήγησης','φορολογική ενημερότητα','ασφαλιστική ικανότητα','ποινικό μητρώο','μεταβίβαση οχήματος','σύνταξη','κάρτα ανεργίας'];
+const KEYS=[
+ ['🔑','Κωδικοί TaxisNet','Το «κλειδί» για σχεδόν όλες τις υπηρεσίες gov.gr. Έκδοση online με ΑΦΜ & στοιχεία εκκαθαριστικού ή μέσω ΚΕΠ/ΔΟΥ.','https://www.gov.gr/ipiresies/polites-kai-kathemerinoteta/ellenes-tou-exoterikou/elektronike-eggraphe-diakheirise-kodikon-taxisnet'],
+ ['🎥','myKEPlive','Βιντεοκλήση με υπάλληλο ΚΕΠ από το σπίτι — ό,τι θα έκανες στο γκισέ, χωρίς μετακίνηση.','https://mykeplive.gov.gr/'],
+ ['📅','Ραντεβού στο ΚΕΠ','Κλείσε ραντεβού σε όποιο ΚΕΠ θέλεις για να μη περιμένεις στην ουρά.','https://rantevou.kep.gov.gr/'],
+ ['📱','Gov.gr Wallet','Ψηφιακή ταυτότητα & δίπλωμα στο κινητό, με ισχύ ίδια με το φυσικό έγγραφο.','https://wallet.gov.gr/']
+];
+function rHome(){
+  const HN=(window.KEP_NEWS||[]).filter(n=>n.status==='ανοιχτές αιτήσεις'||n.status==='πληρωμή').sort((a,b)=>String(b.date).localeCompare(String(a.date))).slice(0,4);
+  $('#homeNews').innerHTML=HN.length?`<h3>📰 Τώρα τρέχουν <button class="btn g sm" data-go="news" style="margin-left:8px">Όλες οι ενημερώσεις →</button></h3><div class="grid g2">${HN.map(n=>`<div class="card news tile" data-go="news"><div style="flex:1"><div class="row"><span class="d">${fmtD(n.date)}</span><div class="sp"></div><span class="st ${NST[n.status]}">${esc(n.status)}</span></div><b>${esc(n.title)}</b>${n.amount?`<div class="small">💶 ${esc(n.amount)}</div>`:''}</div></div>`).join('')}</div>`:'';
+  $('#homeAg').innerHTML=AG.map(a=>`<div class="card tile" data-ag="${a.id}"><span class="ic">${a.ic}</span><div><b>${a.t}</b><span class="tiny">${agSvcs(a).length} υπηρεσίες</span></div></div>`).join('');
+  $('#popChips').innerHTML=POP.map(p=>`<span class="chip" data-q="${esc(p)}">${esc(p)}</span>`).join('');
+  const cnt={};SVC.forEach(s=>cnt[s.cat]=(cnt[s.cat]||0)+1);
+  $('#catTiles').innerHTML=Object.keys(CATS).filter(k=>cnt[k]).map(k=>`<div class="card tile" data-cat="${k}"><span class="ic">${CATS[k][0]}</span><div><b>${CATS[k][1]}</b><span class="tiny">${cnt[k]} υπηρεσίες</span></div></div>`).join('');
+  $('#keysBox').innerHTML=KEYS.map(k=>`<div class="card tile"><span class="ic">${k[0]}</span><div style="flex:1"><b>${k[1]}</b><div class="muted small">${k[2]}</div><a class="btn sm" style="margin-top:6px" href="${k[3]}" target="_blank" rel="noopener">Άνοιγμα ↗</a></div></div>`).join('');
+  const open=S.cases.filter(c=>c.status<4).length, soon=S.rem.filter(r=>daysTo(r.date)<=r.before).length;
+  $('#homeStats').innerHTML=[['📋',SVC.length,'υπηρεσίες στον οδηγό','services'],['🗂️',open,'ανοιχτές υποθέσεις','cases'],['🔔',soon,'υπενθυμίσεις που πλησιάζουν','dates'],['★',S.fav.length,'αγαπημένες','services']].map(x=>`<div class="card stat tile" data-go="${x[3]}"><span class="n">${x[0]} ${x[1]}</span><span class="muted small">${x[2]}</span></div>`).join('');
+}
+document.addEventListener('click',e=>{const c=e.target.closest('[data-q]');if(c){$('#svcQ').value=c.dataset.q;$('#svcCat').value='';go('services')}
+  const t=e.target.closest('[data-cat]');if(t){$('#svcQ').value='';go('services');$('#svcCat').value=t.dataset.cat;rSvcList()}});
+$('#homeGo').onclick=()=>{$('#svcQ').value=$('#homeQ').value;go('services')};
+$('#homeQ').addEventListener('keydown',e=>{if(e.key==='Enter')$('#homeGo').click()});
+
+/* ================= SERVICES ================= */
+function rSvc(){const sel=$('#svcCat');if(!sel.options.length){sel.innerHTML='<option value="">Όλες οι κατηγορίες</option>'+Object.keys(CATS).filter(k=>SVC.some(s=>s.cat===k)).map(k=>`<option value="${k}">${CATS[k][0]} ${CATS[k][1]}</option>`).join('')}rSvcList()}
+function rSvcList(){const q=$('#svcQ').value,cat=$('#svcCat').value,ch=$('#svcCh').value,fv=$('#svcFav').checked;
+  let L=search(q).filter(s=>(!cat||s.cat===cat)&&(!ch||s.channels.includes(ch))&&(!fv||S.fav.includes(s.id)));
+  if(!q)L.sort((a,b)=>Object.keys(CATS).indexOf(a.cat)-Object.keys(CATS).indexOf(b.cat)||a.title.localeCompare(b.title,'el'));
+  $('#svcCount').textContent=L.length+' / '+SVC.length;
+  $('#svcList').innerHTML=L.length?L.map(s=>card(s,q)).join(''):`<div class="card muted">Δεν βρέθηκε υπηρεσία. Δοκίμασε άλλη λέξη ή ψάξε στο <a href="https://www.gov.gr/search?q=${encodeURIComponent(q)}" target="_blank" rel="noopener">gov.gr ↗</a>.</div>`}
+['#svcQ','#svcCat','#svcCh','#svcFav'].forEach(s=>$(s).addEventListener('input',rSvcList));
+
+/* ================= LIFE EVENTS ================= */
+const LIFE=[
+ {ic:'👶',t:'Απέκτησα παιδί',find:['ληξιαρχικη πραξη γεννησησ','αμκα','επιδομα γεννησησ','επιδομα παιδιου','μητροτητασ','προσωπικοσ γιατροσ'],tips:['Η δήλωση γέννησης γίνεται συνήθως ηλεκτρονικά από το μαιευτήριο — επιβεβαίωσε ότι καταχωρήθηκε.','Το ΑΜΚΑ του νεογέννητου αποδίδεται αυτόματα με τη ληξιαρχική πράξη.','Πρόσθεσε το παιδί στην επόμενη φορολογική δήλωση (Ε1).']},
+ {ic:'💍',t:'Παντρεύομαι / σύμφωνο συμβίωσης',find:['γαμου','συμφωνο συμβιωσησ','οικογενειακησ καταστασησ','ταυτοτητα'],tips:['Μετά τον γάμο ενημερώνεται το δημοτολόγιο — ζήτα νέο πιστοποιητικό οικογενειακής κατάστασης.','Στο Ε1 επιλέγετε κοινή ή χωριστή δήλωση.']},
+ {ic:'🕊️',t:'Απεβίωσε συγγενής',find:['θανατου','εγγυτερων συγγενων','κληρονομ','αποποιησ','συνταξη χηρεια','μεταβιβαση οχηματοσ'],tips:['Η ληξιαρχική πράξη θανάτου συντάσσεται στο ληξιαρχείο — από αυτήν ξεκινούν όλα.','Προθεσμία δήλωσης φόρου κληρονομιάς: 6 μήνες από τον θάνατο (1 έτος αν ο κληρονόμος/θανών ζει στο εξωτερικό).','Αποποίηση κληρονομιάς: 4 μήνες από τη γνώση (1 έτος αν ο θανών κατοικούσε στο εξωτερικό) στο Ειρηνοδικείο.']},
+ {ic:'🏠',t:'Μετακόμισα / άλλαξα διεύθυνση',find:['διευθυνσησ','μεταδημοτευση','ρευμα','εκλογικ'],tips:['Άλλαξε διεύθυνση στο μητρώο ΑΑΔΕ (myAADE → Μητρώο & Επικοινωνία).','Ενημέρωσε ΕΦΚΑ, τράπεζες, πάροχο ρεύματος/νερού/τηλεφώνου.','Η αλλαγή δημοτολογίου (μεταδημότευση) είναι προαιρετική· η εκλογική εγγραφή ακολουθεί τη δημοτολογική.']},
+ {ic:'🚗',t:'Αγόρασα / πούλησα αυτοκίνητο',find:['μεταβιβαση','τελη κυκλοφοριασ','κτεο','ακινησια','πινακιδ'],tips:['Η μεταβίβαση μεταχειρισμένου γίνεται πλέον ψηφιακά (gov.gr) από πωλητή & αγοραστή.','Ασφάλισε το όχημα στο όνομά σου πριν κυκλοφορήσει.','Έλεγξε ότι ο πωλητής δεν έχει οφειλές τελών κυκλοφορίας.']},
+ {ic:'💼',t:'Έχασα τη δουλειά μου',find:['ανεργια','επιδομα ανεργιασ','ασφαλιστικη ικανοτητα','ελαχιστο εγγυημενο','κοτ'],tips:['Εγγράψου στη ΔΥΠΑ το συντομότερο — για το επίδομα ανεργίας η αίτηση γίνεται εντός 60 ημερών από τη λύση της σχέσης εργασίας (ενδεικτικά, επιβεβαίωσε).','Η ασφαλιστική ικανότητα για ιατροφαρμακευτική περίθαλψη διατηρείται για ορισμένο διάστημα.']},
+ {ic:'🏢',t:'Ανοίγω επιχείρηση',find:['εναρξη','υπηρεσια μιασ στασησ','γεμη','γνωστοποιηση','ενημεροτητα','mydata','τιμολογ'],tips:['Διάλεξε νομική μορφή (ατομική/ΙΚΕ/ΟΕ) — συμβουλέψου λογιστή.','Προσοχή στον σωστό ΚΑΔ: επηρεάζει ΦΠΑ, ασφάλιση, αδειοδότηση.','Ασφάλιση στον e-ΕΦΚΑ ξεκινά με την έναρξη.']},
+ {ic:'👴',t:'Βγαίνω στη σύνταξη',find:['οδηγοσ συνταξησ γηρατοσ','ατλασ','δικαιολογητικα συνταξησ','προσωρινη συνταξη','πορεια αιτησησ','ενσημ','εθνικη συνταξη','συνταξιουχοσ εργασια','αναπηρ','κεπα'],tips:['Έλεγξε πρώτα τον ατομικό λογαριασμό ασφάλισης για κενά/λάθη.','Η αίτηση κύριας σύνταξης γίνεται ηλεκτρονικά (ΑΤΛΑΣ/e-ΕΦΚΑ).']},
+ {ic:'👛',t:'Έχασα το πορτοφόλι μου',find:['απωλεια','ταυτοτητα','αδεια οδηγησησ','διαβατηριο','ευρωπαικη καρτα'],tips:['Δήλωσε την απώλεια/κλοπή στο Αστυνομικό Τμήμα (ή ηλεκτρονικά όπου προβλέπεται).','Κλείδωσε κάρτες τραπεζών αμέσως από το e-banking.','Το ψηφιακό αντίγραφο ταυτότητας/διπλώματος στο Gov.gr Wallet καλύπτει προσωρινά πολλές ανάγκες.']},
+ {ic:'✈️',t:'Ταξιδεύω στο εξωτερικό',find:['διαβατηριο','ευρωπαικη καρτα','διεθνεσ διπλωμα','apostille','χαγησ'],tips:['Στην ΕΕ αρκεί η ταυτότητα (νέου τύπου ή σε καλή κατάσταση).','Έλεγξε ότι το διαβατήριο ισχύει 6+ μήνες για χώρες εκτός ΕΕ.']},
+ {ic:'🔑',t:'Νοικιάζω σπίτι (ιδιοκτήτης ή ενοικιαστής)',find:['μισθωσ','επιδομα στεγασησ','ε9','πεα','ενεργειακησ'],tips:['Ο εκμισθωτής υποβάλλει «Δήλωση πληροφοριακών στοιχείων μίσθωσης» στο myAADE· ο ενοικιαστής την αποδέχεται.','Για νέα μίσθωση απαιτείται ΠΕΑ (πιστοποιητικό ενεργειακής απόδοσης).']},
+ {ic:'🎓',t:'Φοιτητής / σπουδές',find:['ακαδημαικη','σιτιση','στεγαση φοιτ','μετεγγραφ','δοατ','πτυχιου','μηχανογραφικ','πανελλ'],tips:['Η ακαδημαϊκή ταυτότητα (πάσο) εκδίδεται μετά την εγγραφή στη σχολή.','Σίτιση/στέγαση: αιτήσεις κάθε φθινόπωρο στη σχολή.']},
+ {ic:'♿',t:'Αναπηρία / χρόνια πάθηση',find:['κεπα','αναπηρ','καρτα αναπηριασ','σταθμευσησ','προσωπικοσ βοηθοσ'],tips:['Η πιστοποίηση αναπηρίας από ΚΕΠΑ είναι η βάση για επιδόματα & διευκολύνσεις.','Η Κάρτα Αναπηρίας ενοποιεί τις παροχές και εμφανίζεται στο Gov.gr Wallet.']},
+ {ic:'🏡',t:'Κληρονόμησα / αγοράζω ακίνητο',find:['κτηματολ','κληρονομ','γονικη','δωρεα','ε9','ενφια','ταυτοτητα κτιριου','αυθαιρετ'],tips:['Μετά τη μεταβίβαση, δήλωση/καταχώριση στο Κτηματολόγιο.','Ενημέρωσε Ε9 (αν δεν γίνει αυτόματα από το συμβόλαιο).']},
+ {ic:'🏦',t:'Αγοράζω σπίτι με δάνειο',find:['στεγαστικ','σπιτι μου','φορου μεταβιβασησ','κτηματολ','βαρων','ταυτοτητα κτιριου','πεα','ενφια'],tips:['Ζήτησε από την τράπεζα προέγκριση πριν κλείσεις συμφωνία.','Ο μηχανικός ελέγχει νομιμότητα/ταυτότητα κτιρίου· ο δικηγόρος τίτλους & βάρη (Κτηματολόγιο/Υποθηκοφυλακείο).','Υπολόγισε ΦΜΑ + συμβολαιογράφο + Κτηματολόγιο (≈ 5–7% της αξίας συνολικά, ενδεικτικά).']},
+ {ic:'🤒',t:'Αρρώστησα / αναρρωτική άδεια',find:['αναρρωτικ','επιδομα ασθενειασ','ψηφιακη βεβαιωση','ατυχημα','αδεια ασθενειασ παιδιου','ασφαλιστικη ικανοτητα'],tips:['Ο γιατρός εκδίδει ψηφιακή βεβαίωση ανικανότητας — δεν χρειάζεται να πας χαρτιά στον ΕΦΚΑ.','Ιδιωτικός τομέας: τις 3 πρώτες ημέρες πληρώνει ο εργοδότης το μισό· μετά επίδομα ασθενείας από e-ΕΦΚΑ (προϋπόθεση ημέρες ασφάλισης).']},
+ {ic:'💊',t:'Χρειάζομαι φάρμακα / εξετάσεις ΕΟΠΥΥ',find:['φυκ','φαρμακεια εοπυυ','συμμετοχη','αναλωσιμα','γυαλι','εξετασεισ','προσωπικοσ γιατροσ','myhealth'],tips:['Τα φάρμακα υψηλού κόστους (ΦΥΚ) τα παίρνεις πλέον και από ιδιωτικό φαρμακείο ή με παράδοση στο σπίτι (fyk.eopyy.gov.gr).','Η συνταγή/παραπεμπτικό φαίνεται στο myHealth app.']},
+ {ic:'🏗️',t:'Χτίζω / ανακαινίζω',find:['αδεια δομησησ','εργασιων μικρησ','οροι δομησησ','δασ','αυθαιρετ','ταυτοτητα κτιριου','φωτοβολταικ'],tips:['Για οτιδήποτε πέρα από απλή συντήρηση συμβουλέψου μηχανικό: οι άδειες εκδίδονται ηλεκτρονικά (e-Άδειες ΤΕΕ).','Εκτός σχεδίου: έλεγξε δασικό χαρακτήρα (δασικοί χάρτες) πριν από κάθε επένδυση.']},
+ {ic:'📉',t:'Έχω χρέη (εφορία / ΕΦΚΑ / τράπεζα)',find:['ρυθμισ','εξωδικαστικ','ακατασχετ','βεβαιωση οφειλησ','αναστολη εισπραξησ','τειρεσια'],tips:['Δήλωσε ακατάσχετο λογαριασμό για να προστατευτεί μισθός/σύνταξη μέχρι το όριο.','Ο εξωδικαστικός μηχανισμός ρυθμίζει μαζί χρέη σε Δημόσιο, ΕΦΚΑ και τράπεζες.']},
+ {ic:'⚖️',t:'Έχω δικαστική υπόθεση',find:['μικροδιαφορ','διαταγη πληρωμησ','ασφαλιστικα μετρα','νομικη βοηθεια','διαμεσολαβ','τελεσιδικ','αντιγραφ','μηνυση'],tips:['Οι προθεσμίες ένδικων μέσων είναι αυστηρές — υπολόγισέ τες (🧮 Εργαλεία) και συμβουλέψου δικηγόρο.','Αν έχεις χαμηλό εισόδημα, δικαιούσαι νομική βοήθεια (Ν.3226/2004).']}
+];
+function rLife(){$('#lifeTiles').innerHTML=LIFE.map((l,i)=>`<div class="card tile" data-life="${i}"><span class="ic">${l.ic}</span><div><b>${l.t}</b></div></div>`).join('')}
+document.addEventListener('click',e=>{const t=e.target.closest('[data-life]');if(!t)return;const l=LIFE[+t.dataset.life];
+  const seen=new Set(),list=[];l.find.forEach(f=>{const nf=norm(f);SVC.filter(s=>s._t.includes(nf)||s.kw.some(k=>norm(k).includes(nf))).slice(0,3).forEach(s=>{if(!seen.has(s.id)){seen.add(s.id);list.push(s)}})});
+  $('#lifeOut').innerHTML=`<div class="card"><h3 style="margin-top:0">${l.ic} ${l.t} — τι κάνω, με τη σειρά</h3>
+   <div class="wiz">${list.map((s,i)=>`<div class="wstep" data-svc="${s.id}" style="cursor:pointer"><span class="n">${i+1}</span><div style="flex:1"><b>${esc(s.title)}</b><div class="muted small">${esc(s.what)}</div>${badges(s)}</div></div>`).join('')||'<div class="muted">—</div>'}</div>
+   ${l.tips.length?`<h3>💡 Χρήσιμο να ξέρεις</h3><ul>${l.tips.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`:''}
+   <div class="row"><button class="btn g sm" id="lifePrint">🖨️ Εκτύπωση λίστας</button><button class="btn g sm" id="lifeCase">🗂️ Όλα ως υποθέσεις</button></div></div>`;
+  $('#lifePrint').onclick=()=>printHTML(`<div class="doc"><h1>${l.t}</h1><div class="c">Λίστα ενεργειών · ΓΚΙΣΕ 360°</div><ol>${list.map(s=>`<li><b>${esc(s.title)}</b> — ${esc(s.what)}<br><small>Δικαιολογητικά: ${esc(s.docs.join(' · '))}</small><br><small>${esc(s.url||'')}</small></li>`).join('')}</ol><ul>${l.tips.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`);
+  $('#lifeCase').onclick=()=>{list.forEach(s=>S.cases.push(newCase(s)));save();toast('Προστέθηκαν '+list.length+' υποθέσεις');};
+  $('#lifeOut').scrollIntoView({behavior:'smooth'})});
+
+/* ================= FORMS ================= */
+const PF=[['surname','Επώνυμο'],['name','Όνομα'],['father','Όνομα & Επώνυμο Πατέρα'],['mother','Όνομα & Επώνυμο Μητέρας'],['birth','Ημερομηνία γέννησης','date'],['birthplace','Τόπος γέννησης'],['adt','Αριθμός Δελτίου Ταυτότητας'],['afm','ΑΦΜ'],['amka','ΑΜΚΑ'],['phone','Τηλέφωνο'],['city','Τόπος κατοικίας'],['street','Οδός'],['no','Αριθμός'],['tk','Τ.Κ.'],['email','Email']];
+const TPL={
+ yd:[['— Ελεύθερο κείμενο —',''],
+  ['Δεν έχω υποβάλει αίτηση για την ίδια παροχή','δεν έχω υποβάλει αίτηση για την ίδια παροχή σε άλλον φορέα και τα στοιχεία που δηλώνω είναι αληθή.'],
+  ['Μόνιμη κατοικία','διαμένω μόνιμα στη διεύθυνση που αναγράφεται ανωτέρω.'],
+  ['Απώλεια εγγράφου','απώλεσα το/την ………………… (έγγραφο) με αριθμό ………… περίπου στις ……/……/…… και δεν το έχω στην κατοχή μου.'],
+  ['Δεν εργάζομαι','δεν εργάζομαι ούτε λαμβάνω σύνταξη ή επίδομα από οποιονδήποτε φορέα.'],
+  ['Φιλοξενία','φιλοξενώ στην οικία μου τον/την ………………… από ……/……/…… .'],
+  ['Γνησιότητα αντιγράφων','τα προσκομιζόμενα φωτοαντίγραφα είναι ακριβή αντίγραφα των πρωτοτύπων.'],
+  ['Μη ύπαρξη διαθήκης (για κληρονομητήριο)','δεν γνωρίζω την ύπαρξη διαθήκης του αποβιώσαντος ………………… και δεν υπάρχουν άλλοι εξ αδιαθέτου κληρονόμοι πλην των αναφερομένων.']],
+ ex:[['— Γενική —','εξουσιοδοτώ τον/την ………………… του ………………, κάτοχο Α.Δ.Τ. ………………, κάτοικο ………………, να ………………………………… για λογαριασμό μου και να υπογράψει κάθε σχετικό έγγραφο.'],
+  ['Παραλαβή πιστοποιητικού','εξουσιοδοτώ τον/την ………………… (Α.Δ.Τ. ………) να παραλάβει για λογαριασμό μου το πιστοποιητικό ………………… από το ΚΕΠ/την υπηρεσία ………………… .'],
+  ['Κατάθεση αίτησης','εξουσιοδοτώ τον/την ………………… (Α.Δ.Τ. ………) να καταθέσει για λογαριασμό μου αίτηση για ………………… στην υπηρεσία ………………… και να παραλάβει τη σχετική απάντηση.'],
+  ['Διαβατήριο ανηλίκου','εξουσιοδοτώ τον/την ………………… (Α.Δ.Τ. ………) να προβεί σε όλες τις απαραίτητες ενέργειες για την έκδοση διαβατηρίου του ανήλικου τέκνου μου ………………… .']],
+ ai:[['— Γενική αίτηση —','Παρακαλώ να μου χορηγήσετε ………………………………… .'],['Χορήγηση αντιγράφου','Παρακαλώ να μου χορηγήσετε επικυρωμένο αντίγραφο του/της ………………… που τηρείται στην υπηρεσία σας, για χρήση ………………… .'],['Πρόσβαση σε έγγραφα (άρθρο 5 ΚΔΔ)','Παρακαλώ, κατ’ εφαρμογή του άρθρου 5 του Κώδικα Διοικητικής Διαδικασίας (Ν.2690/1999), να μου επιτρέψετε την πρόσβαση/χορήγηση αντιγράφων των εγγράφων ………………… που αφορούν την υπόθεσή μου με αρ. πρωτ. ………… , διότι έχω έννομο συμφέρον.'],['Επίσπευση/ενημέρωση για αίτηση','Παρακαλώ να με ενημερώσετε για την πορεία της αίτησής μου με αρ. πρωτ. ………… της ……/……/…… .']],
+ ay:[['— Αίτηση με υπεύθυνη δήλωση —','Παρακαλώ να μου χορηγήσετε ………………… . Δηλώνω υπεύθυνα ότι τα στοιχεία της παρούσας είναι αληθή.']],
+ en:[['— Αίτηση θεραπείας/επανεξέτασης —','Με την παρούσα υποβάλλω αίτηση θεραπείας κατά της υπ’ αριθ. ………… πράξης/απόφασης σας της ……/……/…… , την οποία παρέλαβα στις ……/……/…… , για τους εξής λόγους:\n1. ………………\n2. ………………\nΖητώ την ανάκληση/τροποποίησή της.']]
+};
+const FTITLE={yd:'ΥΠΕΥΘΥΝΗ ΔΗΛΩΣΗ',ex:'ΥΠΕΥΘΥΝΗ ΔΗΛΩΣΗ – ΕΞΟΥΣΙΟΔΟΤΗΣΗ',ai:'ΑΙΤΗΣΗ',ay:'ΑΙΤΗΣΗ – ΥΠΕΥΘΥΝΗ ΔΗΛΩΣΗ',en:'ΑΙΤΗΣΗ ΘΕΡΑΠΕΙΑΣ / ΕΠΑΝΕΞΕΤΑΣΗΣ'};
+let F={};
+function rForm(){const ty=$('#formType').value;$('#formTpl').innerHTML=TPL[ty].map((t,i)=>`<option value="${i}">${esc(t[0])}</option>`).join('');
+  F=Object.assign({},S.profile,{to:F.to||'',subject:F.subject||'',body:TPL[ty][0][1],place:S.profile.city||'',date:new Date().toISOString().slice(0,10)});
+  drawFormFields();drawForm()}
+function drawFormFields(){const ty=$('#formType').value;
+  $('#formFields').innerHTML=`<div class="fgrid">
+   <label class="f">ΠΡΟΣ (υπηρεσία)<input class="inp" data-f="to" value="${esc(F.to)}" placeholder="π.χ. ΚΕΠ Δήμου …"></label>
+   ${ty!=='yd'&&ty!=='ex'?`<label class="f">ΘΕΜΑ<input class="inp" data-f="subject" value="${esc(F.subject)}"></label>`:''}
+   ${PF.map(p=>`<label class="f">${p[1]}<input class="inp" data-f="${p[0]}" type="${p[2]||'text'}" value="${esc(F[p[0]]||'')}"></label>`).join('')}
+   <label class="f">Τόπος υπογραφής<input class="inp" data-f="place" value="${esc(F.place)}"></label>
+   <label class="f">Ημερομηνία<input class="inp" type="date" data-f="date" value="${esc(F.date)}"></label></div>
+   <label class="f" style="margin-top:10px">${ty==='yd'||ty==='ex'?'Κείμενο δήλωσης (μετά το «δηλώνω ότι:»)':'Κείμενο αίτησης'}<textarea class="inp" data-f="body" style="min-height:170px">${esc(F.body)}</textarea></label>
+   <div class="tiny" style="margin-top:6px">Συμπλήρωσε τα «………» και έλεγξε το κείμενο.</div>`}
+$('#formType').onchange=rForm;
+$('#formTpl').onchange=()=>{F.body=TPL[$('#formType').value][+$('#formTpl').value][1];drawFormFields();drawForm()};
+$('#formFields').addEventListener('input',e=>{const k=e.target.dataset.f;if(k){F[k]=e.target.value;drawForm()}});
+function formDoc(){const ty=$('#formType').value,v=k=>esc(F[k]||''),vd=k=>esc(fmtD(F[k]));
+  const personRows=`<tr><td class="l">ΠΡΟΣ(1):</td><td colspan="3">${v('to')}</td></tr>
+   <tr><td class="l">Ο – Η Όνομα:</td><td>${v('name')}</td><td class="l">Επώνυμο:</td><td>${v('surname')}</td></tr>
+   <tr><td class="l">Όνομα και Επώνυμο Πατέρα:</td><td colspan="3">${v('father')}</td></tr>
+   <tr><td class="l">Όνομα και Επώνυμο Μητέρας:</td><td colspan="3">${v('mother')}</td></tr>
+   <tr><td class="l">Ημερομηνία γέννησης(2):</td><td colspan="3">${vd('birth')}</td></tr>
+   <tr><td class="l">Τόπος Γέννησης:</td><td colspan="3">${v('birthplace')}</td></tr>
+   <tr><td class="l">Αριθμός Δελτίου Ταυτότητας:</td><td>${v('adt')}</td><td class="l">Τηλ:</td><td>${v('phone')}</td></tr>
+   <tr><td class="l">ΑΦΜ:</td><td>${v('afm')}</td><td class="l">ΑΜΚΑ:</td><td>${v('amka')}</td></tr>
+   <tr><td class="l">Τόπος Κατοικίας:</td><td>${v('city')}</td><td class="l">Οδός / Αριθ. / ΤΚ:</td><td>${v('street')} ${v('no')} ${v('tk')}</td></tr>
+   <tr><td class="l">Δ/νση Ηλεκτρ. Ταχυδρομείου (Email):</td><td colspan="3">${v('email')}</td></tr>`;
+  const sign=`<p style="text-align:right;margin-top:18px">${v('place')}, ${vd('date')}<br><br>${ty==='yd'||ty==='ex'?'Ο – Η Δηλ.':'Ο/Η Αιτών/ούσα'}<br><br><br>(Υπογραφή)</p>`;
+  if(ty==='yd'||ty==='ex'){
+   return `<div class="doc"><h1>${FTITLE[ty]}</h1><div class="c"><b>(άρθρο 8 Ν.1599/1986)</b></div>
+   <p class="c" style="font-size:12px;border:1px solid #000;padding:6px">Η ακρίβεια των στοιχείων που υποβάλλονται με αυτή τη δήλωση μπορεί να ελεγχθεί με βάση το αρχείο άλλων υπηρεσιών (άρθρο 8 παρ. 4 Ν. 1599/1986)</p>
+   <table>${personRows}</table>
+   <p>Με ατομική μου ευθύνη και γνωρίζοντας τις κυρώσεις (3), που προβλέπονται από τις διατάξεις της παρ. 6 του άρθρου 22 του Ν. 1599/1986, δηλώνω ότι:</p>
+   <div class="body">${v('body')}</div>${sign}
+   <div class="fn">(1) Αναγράφεται από τον ενδιαφερόμενο πολίτη ή Αρχή ή η Υπηρεσία του δημόσιου τομέα, που απευθύνεται η αίτηση.<br>(2) Αναγράφεται ολογράφως.<br>(3) «Όποιος εν γνώσει του δηλώνει ψευδή γεγονότα ή αρνείται ή αποκρύπτει τα αληθινά με έγγραφη υπεύθυνη δήλωση του άρθρου 8 τιμωρείται με φυλάκιση τουλάχιστον τριών μηνών. Εάν ο υπαίτιος αυτών των πράξεων σκόπευε να προσπορίσει στον εαυτόν του ή σε άλλον περιουσιακό όφελος βλάπτοντας τρίτον ή σκόπευε να βλάψει άλλον, τιμωρείται με κάθειρξη μέχρι 10 ετών».<br>(4) Σε περίπτωση ανεπάρκειας χώρου η δήλωση συνεχίζεται στην πίσω όψη της και υπογράφεται από τον δηλούντα ή την δηλούσα.</div></div>`}
+  return `<div class="doc"><h1>${FTITLE[ty]}</h1>${F.subject?`<p class="c"><b>ΘΕΜΑ:</b> ${v('subject')}</p>`:''}
+   <table>${personRows}</table><p>${ty==='ay'?'Με ατομική μου ευθύνη και γνωρίζοντας τις κυρώσεις της παρ. 6 του άρθρου 22 του Ν. 1599/1986:':''}</p>
+   <div class="body">${v('body')}</div>${sign}</div>`}
+function drawForm(){$('#formPreview').innerHTML=formDoc()}
+$('#fPrint').onclick=()=>printHTML(formDoc());
+$('#fWord').onclick=()=>wordDoc(($('#formType').selectedOptions[0].text.split(' (')[0])+'.doc',formDoc());
+$('#fCopy').onclick=()=>{const d=document.createElement('div');d.innerHTML=formDoc();navigator.clipboard.writeText(d.innerText).then(()=>toast('Αντιγράφηκε'),()=>toast('Δεν επιτράπηκε η αντιγραφή'))};
+
+/* ================= CASES ================= */
+const STATUS=['Νέα','Συλλογή δικαιολογητικών','Σε αναμονή (πελάτη/τρίτου)','Υποβλήθηκε','Ολοκληρώθηκε','Ακυρώθηκε'];
+function priceFor(title){const P=getPrices();const n=norm(title);const p=P.find(x=>n.includes(norm(x.service).slice(0,12))||norm(x.service).includes(n.slice(0,12)));return p?p.my:0}
+function newCase(s){return {id:uid(),svc:s?s.id:'',title:s?s.title:'',client:'',status:0,prot:'',opened:new Date().toISOString().slice(0,10),due:'',fee:s?priceFor(s.title):0,govfee:'',paid:false,notes:'',docs:s?s.docs.map(d=>({t:d,ok:false})):[]}}
+function editCase(id,svcId,draft){const c=draft||(id?JSON.parse(JSON.stringify(S.cases.find(x=>x.id===id))):Object.assign(newCase(byId(svcId)),{_new:1}));const isNew=!!c._new;
+  const cliOpts=S.clients.map(k=>`<option value="${k.id}" ${c.client===k.id?'selected':''}>${esc(k.name)}${k.afm?' · '+esc(k.afm):''}</option>`).join('');
+  openModal(`<h3>${isNew?'＋ Νέα υπόθεση':'✎ Υπόθεση'}</h3>`,`<div class="fgrid">
+   <label class="f" style="grid-column:1/-1">Υπηρεσία / θέμα<input class="inp" id="cT" list="svcDL" value="${esc(c.title)}"></label>
+   <datalist id="svcDL">${SVC.map(s=>`<option value="${esc(s.title)}">`).join('')}</datalist>
+   <label class="f">Πελάτης / για ποιον<select class="inp" id="cC"><option value="">— εγώ —</option>${cliOpts}</select></label>
+   <label class="f">Κατάσταση<select class="inp" id="cS">${STATUS.map((x,i)=>`<option value="${i}" ${+c.status===i?'selected':''}>${x}</option>`).join('')}</select></label>
+   <label class="f">Αρ. πρωτοκόλλου / αίτησης<input class="inp" id="cP" value="${esc(c.prot)}"></label>
+   <label class="f">Ημ. έναρξης<input class="inp" type="date" id="cO" value="${esc(c.opened)}"></label>
+   <label class="f">Προθεσμία / αναμενόμενη<input class="inp" type="date" id="cD" value="${esc(c.due)}"></label>
+   <label class="f">Αμοιβή γραφείου (€)<input class="inp" type="number" step="0.01" id="cF" value="${esc(c.fee)}"></label>
+   <label class="f">Παράβολα / τέλη (€)<input class="inp" type="number" step="0.01" id="cG" value="${esc(c.govfee)}"></label>
+   <label class="f row" style="flex-direction:row;align-items:center;gap:6px"><input type="checkbox" id="cPd" ${c.paid?'checked':''} style="accent-color:var(--red)"> Εξοφλήθηκε</label></div>
+   <h3>📎 Δικαιολογητικά</h3><ul class="chk" id="cDocs">${c.docs.map((d,i)=>`<li class="${d.ok?'done':''}"><input type="checkbox" data-di="${i}" ${d.ok?'checked':''}><span style="flex:1">${esc(d.t)}</span><button class="x" data-dx="${i}" style="font-size:12px">✕</button></li>`).join('')}</ul>
+   <div class="row"><input class="inp" id="cNewDoc" placeholder="Προσθήκη δικαιολογητικού" style="flex:1"><button class="btn g sm" id="cAddDoc">＋</button></div>
+   <label class="f" style="margin-top:10px">Σημειώσεις / ιστορικό<textarea class="inp" id="cN">${esc(c.notes)}</textarea></label>
+   <div class="row" style="margin-top:12px"><button class="btn" id="cSave">💾 Αποθήκευση</button>${c.svc?`<button class="btn g" data-svc="${c.svc}">📋 Οδηγίες υπηρεσίας</button>`:''}${isNew?'':`<button class="btn g" id="cNote">🧾 Σημείωμα/Προσφορά</button><div class="sp"></div><button class="btn g" id="cDel">🗑️ Διαγραφή</button>`}</div>`);
+  const sync=()=>{c.title=$('#cT').value;c.client=$('#cC').value;c.status=+$('#cS').value;c.prot=$('#cP').value;c.opened=$('#cO').value;c.due=$('#cD').value;c.fee=$('#cF').value;c.govfee=$('#cG').value;c.paid=$('#cPd').checked;c.notes=$('#cN').value;
+    $$('#cDocs [data-di]').forEach(x=>c.docs[+x.dataset.di].ok=x.checked);
+    const s=SVC.find(x=>x.title===c.title);if(s&&s.id!==c.svc){c.svc=s.id;if(!c.docs.some(d=>d.ok))c.docs=s.docs.map(d=>({t:d,ok:false}));if(!+c.fee)c.fee=priceFor(s.title)}};
+  $('#cT').addEventListener('change',()=>{const s=SVC.find(x=>x.title===$('#cT').value);if(s&&s.id!==c.svc){sync();editCase(null,null,c)}});
+  $('#cAddDoc').onclick=()=>{const t=$('#cNewDoc').value.trim();if(!t)return;sync();c.docs.push({t,ok:false});editCase(null,null,c)};
+  $$('#cDocs [data-dx]').forEach(b=>b.onclick=()=>{sync();c.docs.splice(+b.dataset.dx,1);editCase(null,null,c)});
+  $$('#cDocs [data-di]').forEach(x=>x.onchange=()=>x.closest('li').classList.toggle('done',x.checked));
+  function commit(close){delete c._new;const i=S.cases.findIndex(x=>x.id===c.id);if(i>-1)S.cases[i]=c;else S.cases.push(c);save();if(close){closeModal();toast('Αποθηκεύτηκε');if($('#pg-cases').classList.contains('on'))rCases();}}
+  $('#cSave').onclick=()=>{sync();if(!c.title.trim())return toast('Γράψε τίτλο υπόθεσης');commit(true)};
+  if($('#cDel'))$('#cDel').onclick=function(){if(this.dataset.c){S.cases=S.cases.filter(x=>x.id!==c.id);save();closeModal();rCases();toast('Διαγράφηκε')}else{this.dataset.c=1;this.textContent='⚠️ Σίγουρα; Ξανά κλικ'}};
+  if($('#cNote'))$('#cNote').onclick=()=>{sync();printHTML(noteDoc(c))};
+}
+function cliName(id){const k=S.clients.find(x=>x.id===id);return k?k.name:''}
+function noteDoc(c){const k=S.clients.find(x=>x.id===c.client)||{},o=S.profile,tot=(+c.fee||0)+(+c.govfee||0);
+  return `<div class="doc"><h1>ΣΗΜΕΙΩΜΑ ΑΝΑΘΕΣΗΣ / ΠΡΟΣΦΟΡΑ</h1><div class="c" style="font-size:12px">(δεν αποτελεί φορολογικό παραστατικό)</div>
+  <p><b>Γραφείο:</b> ${esc(o.office||((o.name||'')+' '+(o.surname||'')))} ${o.officeAfm?'· ΑΦΜ '+esc(o.officeAfm):''} ${o.phone?'· Τηλ. '+esc(o.phone):''}<br><b>Πελάτης:</b> ${esc(k.name||'—')} ${k.afm?'· ΑΦΜ '+esc(k.afm):''} ${k.phone?'· Τηλ. '+esc(k.phone):''}<br><b>Ημερομηνία:</b> ${fmtD(new Date().toISOString().slice(0,10))}</p>
+  <table><tr><td class="l">Υπηρεσία</td><td>${esc(c.title)}</td></tr><tr><td class="l">Αρ. πρωτ.</td><td>${esc(c.prot||'—')}</td></tr>
+  <tr><td class="l">Αμοιβή διεκπεραίωσης</td><td>${eur(c.fee)}</td></tr><tr><td class="l">Παράβολα/τέλη Δημοσίου</td><td>${eur(c.govfee)}</td></tr><tr><td class="l">ΣΥΝΟΛΟ</td><td><b>${eur(tot)}</b></td></tr><tr><td class="l">Κατάσταση πληρωμής</td><td>${c.paid?'Εξοφλήθηκε':'Εκκρεμεί'}</td></tr></table>
+  <p><b>Απαιτούμενα δικαιολογητικά:</b></p><ul>${c.docs.map(d=>`<li>${d.ok?'☑':'☐'} ${esc(d.t)}</li>`).join('')}</ul>
+  <p style="font-size:12px">Ο πελάτης εξουσιοδοτεί το γραφείο για τη διεκπεραίωση της ανωτέρω υπηρεσίας. Τα προσωπικά δεδομένα τηρούνται μόνο για τον σκοπό αυτό (GDPR).</p>
+  <p style="display:flex;justify-content:space-between;margin-top:30px"><span>Ο/Η Πελάτης</span><span>Για το Γραφείο</span></p></div>`}
+let caseF=-1;
+function rCases(){const L=S.cases;const cnt=i=>L.filter(c=>+c.status===i).length;
+  $('#caseStats').innerHTML=[['🗂️',L.length,'σύνολο'],['⏳',L.filter(c=>c.status<4).length,'ανοιχτές'],['⚠️',L.filter(c=>c.status<4&&c.due&&daysTo(c.due)<0).length,'εκπρόθεσμες'],['☑',cnt(4),'ολοκληρωμένες']].map(x=>`<div class="card stat"><span class="n">${x[0]} ${x[1]}</span><span class="muted small">${x[2]}</span></div>`).join('');
+  $('#caseFilt').innerHTML=`<span class="chip ${caseF<0?'on':''}" data-cf="-1">Όλες</span>`+STATUS.map((s,i)=>`<span class="chip ${caseF===i?'on':''}" data-cf="${i}">${s} (${cnt(i)})</span>`).join('');
+  const q=norm($('#caseQ').value);
+  const V=L.filter(c=>(caseF<0||+c.status===caseF)&&(!q||norm([c.title,c.prot,cliName(c.client),c.notes].join(' ')).includes(q))).sort((a,b)=>(a.status>=4)-(b.status>=4)||String(a.due||'9').localeCompare(String(b.due||'9')));
+  $('#caseList').innerHTML=V.length?`<div class="grid g2">${V.map(c=>{const d=c.due?daysTo(c.due):null,done=c.docs.filter(x=>x.ok).length;
+   return `<div class="card svc" data-case="${c.id}"><div class="row"><span class="t" style="flex:1">${esc(c.title)}</span><span class="st s${c.status}">${STATUS[c.status]}</span></div>
+   <div class="muted small">${c.client?'👤 '+esc(cliName(c.client))+' · ':''}${c.prot?'Πρωτ. '+esc(c.prot)+' · ':''}από ${fmtD(c.opened)}</div>
+   <div class="row small">📎 ${done}/${c.docs.length} δικαιολογητικά ${d!==null&&c.status<4?`· <span class="days ${d<0?'over':d<=7?'soon':'ok'}">${d<0?'εκπρόθεσμη '+(-d)+' ημ.':'σε '+d+' ημ.'}</span>`:''} ${+c.fee?`· 💶 ${eur(c.fee)} ${c.paid?'☑':'<b style="color:var(--gold)">απλήρωτο</b>'}`:''}</div></div>`}).join('')}</div>`:`<div class="card muted">Δεν υπάρχουν υποθέσεις. Άνοιξε μια υπηρεσία και πάτα «🗂️ Νέα υπόθεση» ή το κουμπί «＋ Νέα υπόθεση».</div>`}
+document.addEventListener('click',e=>{const c=e.target.closest('[data-case]');if(c)editCase(c.dataset.case);const f=e.target.closest('[data-cf]');if(f){caseF=+f.dataset.cf;rCases()}});
+$('#caseQ').addEventListener('input',rCases);
+$('#caseNew').onclick=()=>editCase(null);
+$('#caseCsv').onclick=()=>dl('ypotheseis.csv',csv([['Υπηρεσία','Πελάτης','Κατάσταση','Πρωτόκολλο','Έναρξη','Προθεσμία','Αμοιβή','Παράβολα','Εξοφλήθηκε','Δικαιολογητικά','Σημειώσεις']].concat(S.cases.map(c=>[c.title,cliName(c.client),STATUS[c.status],c.prot,fmtD(c.opened),fmtD(c.due),c.fee,c.govfee,c.paid?'ΝΑΙ':'ΟΧΙ',c.docs.filter(d=>d.ok).length+'/'+c.docs.length,c.notes]))),'text/csv;charset=utf-8');
+$('#casePrint').onclick=()=>printHTML(`<div class="doc"><h1>Υποθέσεις</h1><table><tr><td class="l">Υπηρεσία</td><td class="l">Πελάτης</td><td class="l">Κατάσταση</td><td class="l">Πρωτ.</td><td class="l">Προθεσμία</td></tr>${S.cases.map(c=>`<tr><td>${esc(c.title)}</td><td>${esc(cliName(c.client))}</td><td>${STATUS[c.status]}</td><td>${esc(c.prot)}</td><td>${fmtD(c.due)}</td></tr>`).join('')}</table></div>`);
+
+/* ================= OFFICE (private KEP) ================= */
+function getPrices(){if(!S.prices){S.prices=(window.KEP_PRIVATE||[]).map(p=>({id:uid(),service:p.service,min:p.price_min,max:p.price_max,my:Math.round(((+p.price_min||0)+(+p.price_max||0))/2),note:p.note||''}))}return S.prices}
+function rOffice(){const P=getPrices();const L=S.cases;const rev=L.filter(c=>c.paid).reduce((a,c)=>a+(+c.fee||0),0),due=L.filter(c=>!c.paid&&+c.fee).reduce((a,c)=>a+(+c.fee||0),0);
+  const m=new Date().toISOString().slice(0,7);const revM=L.filter(c=>c.paid&&String(c.opened).startsWith(m)).reduce((a,c)=>a+(+c.fee||0),0);
+  $('#offStats').innerHTML=[['👥',S.clients.length,'πελάτες'],['💶',eur(rev),'εισπραγμένες αμοιβές'],['📆',eur(revM),'αυτόν τον μήνα'],['⏳',eur(due),'ανείσπρακτα']].map(x=>`<div class="card stat"><span class="n" style="font-size:21px">${x[0]} ${x[1]}</span><span class="muted small">${x[2]}</span></div>`).join('');
+  rClients();
+  $('#priceTable').innerHTML=`<tr><th>Υπηρεσία</th><th>Αγορά από</th><th>έως</th><th>Η τιμή μου (€)</th><th>Σημείωση</th><th></th></tr>`+P.map(p=>`<tr><td><input class="inp" data-pr="${p.id}|service" value="${esc(p.service)}"></td><td>${p.min!==''&&p.min!=null?eur(p.min):'—'}</td><td>${p.max!==''&&p.max!=null?eur(p.max):'—'}</td><td style="width:120px"><input class="inp" type="number" step="0.5" data-pr="${p.id}|my" value="${esc(p.my)}"></td><td class="tiny">${esc(p.note)}</td><td><button class="x" data-prx="${p.id}">✕</button></td></tr>`).join('')}
+$('#priceTable').addEventListener('change',e=>{const d=e.target.dataset.pr;if(!d)return;const[id,k]=d.split('|');const p=getPrices().find(x=>x.id===id);p[k]=k==='my'?+e.target.value:e.target.value;save();toast('Αποθηκεύτηκε')});
+$('#priceTable').addEventListener('click',e=>{const id=e.target.dataset.prx;if(!id)return;if(e.target.dataset.c){S.prices=getPrices().filter(x=>x.id!==id);save();rOffice()}else{e.target.dataset.c=1;e.target.textContent='✕?'}});
+$('#priceAdd').onclick=()=>{getPrices().unshift({id:uid(),service:'Νέα υπηρεσία',min:'',max:'',my:0,note:''});save();rOffice()};
+$('#pricePrint').onclick=()=>{const o=S.profile;printHTML(`<div class="doc"><h1>ΤΙΜΟΚΑΤΑΛΟΓΟΣ ΥΠΗΡΕΣΙΩΝ</h1><div class="c">${esc(o.office||'')}</div><table><tr><td class="l">Υπηρεσία</td><td class="l">Αμοιβή</td></tr>${getPrices().map(p=>`<tr><td>${esc(p.service)}</td><td>${eur(p.my)}</td></tr>`).join('')}</table><p style="font-size:11px">Οι τιμές αφορούν αμοιβή διεκπεραίωσης· τυχόν παράβολα/τέλη Δημοσίου επιβαρύνουν επιπλέον.</p></div>`)};
+function rClients(){const q=norm($('#cliQ').value);const L=S.clients.filter(k=>!q||norm([k.name,k.afm,k.phone,k.email].join(' ')).includes(q));
+  $('#cliTable').innerHTML=`<tr><th>Ονοματεπώνυμο</th><th>ΑΦΜ</th><th>ΑΜΚΑ</th><th>Τηλέφωνο</th><th>Email</th><th>Υποθέσεις</th><th></th></tr>`+(L.length?L.map(k=>`<tr><td><b>${esc(k.name)}</b></td><td>${esc(k.afm)}</td><td>${esc(k.amka)}</td><td>${k.phone?`<a href="tel:${esc(k.phone)}">${esc(k.phone)}</a>`:''}</td><td>${esc(k.email)}</td><td>${S.cases.filter(c=>c.client===k.id).length}</td><td><button class="btn g sm" data-cli="${k.id}">✎</button></td></tr>`).join(''):`<tr><td colspan="7" class="muted">Κανένας πελάτης ακόμα.</td></tr>`)}
+$('#cliQ').addEventListener('input',rClients);
+function editClient(id){const k=id?Object.assign({},S.clients.find(x=>x.id===id)):{id:uid(),name:'',afm:'',amka:'',adt:'',phone:'',email:'',addr:'',notes:'',consent:false};
+  const fl=[['name','Ονοματεπώνυμο'],['afm','ΑΦΜ'],['amka','ΑΜΚΑ'],['adt','Αρ. ταυτότητας'],['phone','Τηλέφωνο'],['email','Email'],['addr','Διεύθυνση']];
+  openModal(`<h3>👤 ${id?'Πελάτης':'Νέος πελάτης'}</h3>`,`<div class="fgrid">${fl.map(f=>`<label class="f">${f[1]}<input class="inp" data-k="${f[0]}" value="${esc(k[f[0]])}"></label>`).join('')}</div>
+   <label class="f" style="margin-top:8px">Σημειώσεις<textarea class="inp" data-k="notes">${esc(k.notes)}</textarea></label>
+   <label class="row small" style="margin-top:8px"><input type="checkbox" id="kCons" ${k.consent?'checked':''} style="accent-color:var(--red)"> Ο πελάτης συναίνεσε στην τήρηση των στοιχείων του (GDPR)</label>
+   <div class="row" style="margin-top:12px"><button class="btn" id="kSave">💾 Αποθήκευση</button>${id?`<button class="btn g" id="kCase">＋ Υπόθεση για αυτόν</button><div class="sp"></div><button class="btn g" id="kDel">🗑️ Διαγραφή</button>`:''}</div>`);
+  const sync=()=>{$$('#mBody [data-k]').forEach(i=>k[i.dataset.k]=i.value);k.consent=$('#kCons').checked};
+  $('#kSave').onclick=()=>{sync();if(!k.name.trim())return toast('Γράψε όνομα');const i=S.clients.findIndex(x=>x.id===k.id);if(i>-1)S.clients[i]=k;else S.clients.push(k);save();closeModal();rOffice()};
+  if(id){$('#kCase').onclick=()=>{sync();closeModal();const c=newCase(null);c.client=k.id;S.cases.push(c);save();editCase(c.id)};
+   $('#kDel').onclick=function(){if(this.dataset.c){S.clients=S.clients.filter(x=>x.id!==k.id);save();closeModal();rOffice()}else{this.dataset.c=1;this.textContent='⚠️ Σίγουρα; Ξανά κλικ'}}}}
+$('#cliNew').onclick=()=>editClient(null);
+document.addEventListener('click',e=>{const b=e.target.closest('[data-cli]');if(b)editClient(b.dataset.cli)});
+$('#cliCsv').onclick=()=>dl('pelates.csv',csv([['Ονοματεπώνυμο','ΑΦΜ','ΑΜΚΑ','ΑΔΤ','Τηλέφωνο','Email','Διεύθυνση','Συναίνεση GDPR']].concat(S.clients.map(k=>[k.name,k.afm,k.amka,k.adt,k.phone,k.email,k.addr,k.consent?'ΝΑΙ':'ΟΧΙ']))),'text/csv;charset=utf-8');
+
+/* ================= DATES ================= */
+function daysTo(s){if(!s)return 9999;const d=new Date(s+'T00:00:00');return Math.round((d-today())/864e5)}
+const MONTHS=['Ιανουάριος','Φεβρουάριος','Μάρτιος','Απρίλιος','Μάιος','Ιούνιος','Ιούλιος','Αύγουστος','Σεπτέμβριος','Οκτώβριος','Νοέμβριος','Δεκέμβριος'];
+function rDates(){const R=S.rem.slice().sort((a,b)=>a.date.localeCompare(b.date));
+  $('#remList').innerHTML=R.length?R.map(r=>{const d=daysTo(r.date);return `<div class="row" style="border-bottom:1px solid var(--line);padding:7px 0"><div style="flex:1"><b>${esc(r.title)}</b><div class="tiny">${fmtD(r.date)} · ειδοποίηση ${r.before} ημ. πριν</div></div><span class="days ${d<0?'over':d<=r.before?'soon':'ok'}">${d<0?'έληξε πριν '+(-d)+' ημ.':d===0?'σήμερα':'σε '+d+' ημ.'}</span><button class="x" data-rx="${r.id}">✕</button></div>`}).join(''):'<div class="muted small">Καμία υπενθύμιση.</div>';
+  const D=(window.KEP_DEADLINES||[]).slice().sort((a,b)=>a.month-b.month);const cm=new Date().getMonth()+1;
+  $('#dlList').innerHTML=D.length?MONTHS.map((m,i)=>{const it=D.filter(x=>+x.month===i+1);if(!it.length)return'';return `<div style="margin:8px 0"><div class="small" style="color:${i+1===cm?'var(--red2)':'var(--tx2)'};font-weight:700">${m}${i+1===cm?' · τώρα':''}</div>${it.map(x=>`<div style="padding:4px 0 4px 10px;border-left:2px solid ${i+1===cm?'var(--red)':'var(--line)'}"><b>${x.day?esc(x.day)+' · ':''}${esc(x.title)}</b><div class="tiny">${esc(x.desc)}</div></div>`).join('')}</div>`}).join(''):'<div class="muted small">—</div>';
+  // browser notification for due
+  const due=R.filter(r=>{const d=daysTo(r.date);return d<=r.before&&d>=-1});
+  if(due.length&&window.Notification&&Notification.permission==='granted'&&!sessionStorage.kepN){sessionStorage.kepN=1;new Notification('ΓΚΙΣΕ 360°',{body:due.map(r=>r.title+' — '+fmtD(r.date)).join('\n')})}
+}
+$('#remAdd').onclick=()=>{const t=$('#remT').value.trim(),d=$('#remD').value;if(!t||!d)return toast('Συμπλήρωσε τίτλο & ημερομηνία');S.rem.push({id:uid(),title:t,date:d,before:+$('#remB').value||0});save();$('#remT').value='';rDates();
+  if(window.Notification&&Notification.permission==='default')Notification.requestPermission()};
+document.addEventListener('click',e=>{const x=e.target.dataset&&e.target.dataset.rx;if(x){S.rem=S.rem.filter(r=>r.id!==x);save();rDates()}});
+$('#remIcs').onclick=()=>{if(!S.rem.length)return toast('Δεν υπάρχουν υπενθυμίσεις');const f=s=>s.replace(/-/g,'');
+  const ev=S.rem.map(r=>['BEGIN:VEVENT','UID:'+r.id+'@kep360','DTSTAMP:'+new Date().toISOString().replace(/[-:]/g,'').slice(0,15)+'Z','DTSTART;VALUE=DATE:'+f(r.date),'SUMMARY:'+r.title.replace(/[,;]/g,' '),'BEGIN:VALARM','TRIGGER:-P'+(r.before||0)+'D','ACTION:DISPLAY','DESCRIPTION:'+r.title.replace(/[,;]/g,' '),'END:VALARM','END:VEVENT'].join('\r\n'));
+  dl('gkise360-ypenthymiseis.ics',['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//KEP360//EL'].concat(ev,'END:VCALENDAR').join('\r\n'),'text/calendar')};
+
+/* ================= CONTACTS ================= */
+const CONTACTS=[
+ ['🏛️ ΚΕΠ & gov.gr',[['Εθνική πύλη gov.gr (όλες οι υπηρεσίες)','https://www.gov.gr/'],['Ραντεβού σε ΚΕΠ','https://rantevou.kep.gov.gr/'],['myKEPlive – βιντεοκλήση με ΚΕΠ','https://mykeplive.gov.gr/'],['Εύρεση ΚΕΠ & ωράριο','https://www.kep.gov.gr/'],['Υπεύθυνη δήλωση/εξουσιοδότηση ψηφιακά','https://docs.gov.gr/'],['Gov.gr Wallet','https://wallet.gov.gr/']],[['1500','Γραμμή Εξυπηρέτησης Πολιτών (ΚΕΠ)']]],
+ ['💶 ΑΑΔΕ – Φορολογία',[['myAADE','https://www1.aade.gr/aadeapps3/myaade/'],['Ραντεβού ΑΑΔΕ / myAADElive','https://www.aade.gr/']],[['1521','Κέντρο Εξυπηρέτησης Φορολογουμένων']]],
+ ['🛡️ e-ΕΦΚΑ & ΔΥΠΑ',[['e-ΕΦΚΑ','https://www.efka.gov.gr/'],['ΔΥΠΑ (πρώην ΟΑΕΔ)','https://www.dypa.gov.gr/'],['ΑΜΚΑ','https://www.amka.gr/']],[['1555','e-ΕΦΚΑ & ΔΥΠΑ εξυπηρέτηση']]],
+ ['🤝 Πρόνοια & Υγεία',[['ΟΠΕΚΑ – επιδόματα','https://opeka.gr/'],['myHealth / ΗΔΙΚΑ','https://www.idika.gr/']],[['1566','Γραμμή υγείας ΕΟΔΥ/ΕΚΑΒ πληροφορίες (ενδεικτικά)']]],
+ ['🚗 Μεταφορές & Αστυνομία',[['Υπουργείο Υποδομών & Μεταφορών','https://www.yme.gov.gr/'],['Ελληνική Αστυνομία (διαβατήρια/ταυτότητες)','https://www.astynomia.gr/'],['Διαβατήρια','https://www.passport.gov.gr/']],[['100','Άμεση Δράση'],['112','Ευρωπαϊκός αριθμός έκτακτης ανάγκης']]],
+ ['🗺️ Ακίνητα & Επιχειρήσεις',[['Ελληνικό Κτηματολόγιο','https://www.ktimatologio.gr/'],['ΓΕΜΗ','https://www.businessregistry.gr/']],[]]
+];
+function rContacts(){const UC=window.KEP_UTIL_CONTACTS||[];$('#contactsBox').innerHTML=(UC.length?`<div class="card" style="grid-column:1/-1"><h3 style="margin-top:0">⚡💧📡 Ρεύμα, νερό, αέριο, τηλεφωνία — βλάβες & εξυπηρέτηση</h3><div class="grid g3">${UC.map(c=>`<div class="row">${c.tel?`<a class="btn sm" href="tel:${esc(String(c.tel).replace(/\s/g,''))}">📞 ${esc(c.tel)}</a>`:''}<span class="small">${c.url?`<a href="${esc(c.url)}" target="_blank" rel="noopener">${esc(c.org)} ↗</a>`:esc(c.org)}</span></div>`).join('')}</div></div>`:'')+CONTACTS.map(c=>`<div class="card"><h3 style="margin-top:0">${c[0]}</h3>${c[2].map(p=>`<div class="row" style="margin:4px 0"><a class="btn sm" href="tel:${p[0]}">📞 ${p[0]}</a><span class="small">${esc(p[1])}</span></div>`).join('')}<ul style="margin:8px 0 0;padding-left:18px">${c[1].map(l=>`<li><a href="${l[1]}" target="_blank" rel="noopener">${esc(l[0])} ↗</a></li>`).join('')}</ul></div>`).join('')+
+ `<div class="card"><h3 style="margin-top:0">🔎 Δεν το βρίσκεις;</h3><div class="muted small">Ψάξε κατευθείαν στον κατάλογο του gov.gr:</div><div class="sbox"><input id="govQ" placeholder="π.χ. άδεια αλιείας"><button class="btn" id="govGo">↗</button></div></div>`;
+ $('#govGo').onclick=()=>window.open('https://www.gov.gr/search?q='+encodeURIComponent($('#govQ').value),'_blank','noopener')}
+
+/* ================= AGENCIES (γκισέ) ================= */
+const AG=[
+ {id:'kep',ic:'🏛️',t:'ΚΕΠ',d:'Πιστοποιητικά, ταυτότητα/διαβατήριο, γνήσιο υπογραφής, ληξιαρχικά, αιτήσεις προς κάθε υπηρεσία.',cats:['tautotita','pistopoiitika','oikogeneia','psifiaka','metanastefsi','stratologia'],ch:'kep',tools:[],
+  links:[['Ραντεβού σε ΚΕΠ','https://rantevou.kep.gov.gr/'],['myKEPlive (βιντεοκλήση)','https://mykeplive.gov.gr/'],['Εύρεση ΚΕΠ','https://www.kep.gov.gr/'],['Υπεύθυνη δήλωση ψηφιακά','https://docs.gov.gr/']],tel:[['1500','Γραμμή Εξυπηρέτησης Πολιτών']]},
+ {id:'trapeza',ic:'🏦',t:'Τράπεζα',d:'Λογαριασμοί, IBAN, ακατάσχετος, κάρτες, πληρωμές RF/IRIS, δάνεια, ρυθμίσεις, Τειρεσίας, παράπονα.',cats:['trapeza'],tools:['iban','rf','loan','akat'],
+  links:[['Τράπεζα της Ελλάδος','https://www.bankofgreece.gr/'],['Ελληνική Ένωση Τραπεζών','https://www.hba.gr/'],['Χρηματοοικονομικός Μεσολαβητής','https://www.hobis.gr/']],tel:[]},
+ {id:'doy',ic:'💶',t:'Εφορία (ΑΑΔΕ / ΔΟΥ)',d:'ΑΦΜ, TaxisNet, Ε1/Ε9/ΕΝΦΙΑ, ενημερότητα, μισθωτήρια, κληρονομιές/γονικές, ρυθμίσεις, επιστροφές, ΦΠΑ.',cats:['forologia'],tools:['afm','tax','vat','fma','rf'],
+  links:[['myAADE','https://www1.aade.gr/aadeapps3/myaade/'],['ΑΑΔΕ','https://www.aade.gr/']],tel:[['1521','Κέντρο Εξυπηρέτησης Φορολογουμένων']]},
+ {id:'efka',ic:'🛡️',t:'e-ΕΦΚΑ (ΙΚΑ) · Συντάξεις & Επιδόματα',d:'ΑΜΚΑ, ένσημα, ασφαλιστική ικανότητα/ενημερότητα, εισφορές, ρυθμίσεις ΚΕΑΟ, σύνταξη γήρατος/αναπηρίας/χηρείας βήμα-βήμα, ΚΕΠΑ, αναρρωτικές & επίδομα ασθενείας, εφάπαξ.',cats:['asfalisi'],tools:['amka','efka','days'],
+  links:[['e-ΕΦΚΑ','https://www.efka.gov.gr/'],['ΑΜΚΑ','https://www.amka.gr/']],tel:[['1555','e-ΕΦΚΑ & ΔΥΠΑ']]},
+ {id:'dypa',ic:'💼',t:'ΔΥΠΑ (πρώην ΟΑΕΔ)',d:'Κάρτα & επίδομα ανεργίας, βεβαιώσεις, προγράμματα απασχόλησης/κατάρτισης, κοινωνικός τουρισμός, κατασκηνώσεις.',cats:['ergasia'],tools:[],
+  links:[['ΔΥΠΑ','https://www.dypa.gov.gr/']],tel:[['1555','e-ΕΦΚΑ & ΔΥΠΑ']]},
+ {id:'ydom',ic:'🏗️',t:'Πολεοδομία (ΥΔΟΜ) & Δασαρχείο',d:'Άδειες δόμησης (e-Άδειες), ΕΕΜΚ, όροι δόμησης, αυθαίρετα, ταυτότητα κτιρίου, δασικοί χάρτες, χαρακτηρισμοί.',cats:['ydom','akinita'],tools:['vat'],
+  links:[['e-Άδειες ΤΕΕ','https://web.tee.gr/e-adeies/'],['Εφαρμογές ΤΕΕ','https://apps.tee.gr/'],['Κτηματολόγιο (δασικοί χάρτες)','https://www.ktimatologio.gr/']],tel:[]},
+ {id:'ktima',ic:'🗺️',t:'Κτηματολόγιο & Υποθηκοφυλακεία',d:'Δήλωση ιδιοκτησίας, αποσπάσματα/διαγράμματα, πιστοποιητικά βαρών, διορθώσεις, εγγραφές πράξεων.',cats:['ktimatologio'],tools:['fma'],
+  links:[['Ελληνικό Κτηματολόγιο','https://www.ktimatologio.gr/']],tel:[]},
+ {id:'dik',ic:'⚖️',t:'Δικαστήρια & Γραμματείες',d:'Πιστοποιητικά, αντίγραφα αποφάσεων, ηλεκτρονική κατάθεση, παράβολα, μικροδιαφορές, διαταγή πληρωμής, κληρονομικά.',cats:['dikaiosyni'],tools:['deadline','days'],
+  links:[['Σόλων – Σύστημα Δικαστηρίων','https://www.solon.gov.gr/']],tel:[]},
+ {id:'dimos',ic:'🏙️',t:'Δήμος (Τοπική Αυτοδιοίκηση)',d:'Δημοτολόγιο/ληξιαρχείο, δημοτικά τέλη & ΤΑΠ, άδειες καταστημάτων & κοινοχρήστων, παιδικοί σταθμοί, κοιμητήρια, κοινωνικές υπηρεσίες.',cats:['dimotika','oikogeneia'],tools:[],
+  links:[['Υπουργείο Εσωτερικών','https://www.ypes.gr/']],tel:[]},
+ {id:'metaf',ic:'🚗',t:'Μεταφορές & Συγκοινωνίες',d:'Διπλώματα, μεταβιβάσεις, άδειες κυκλοφορίας, τέλη, ΚΤΕΟ, ταξινόμηση, κάρτες μετακίνησης, σκάφη.',cats:['oximata'],tools:['days'],
+  links:[['Υπουργείο Υποδομών & Μεταφορών','https://www.yme.gov.gr/'],['ΟΑΣΑ','https://www.oasa.gr/'],['Λιμενικό Σώμα','https://www.hcg.gr/']],tel:[]},
+ {id:'opeka',ic:'🤝',t:'ΟΠΕΚΑ & Πρόνοια',d:'Επίδομα παιδιού, γέννησης, στέγασης, ΕΕΕ, αναπηρικά, ΚΕΠΑ, θέρμανση, ΚΟΤ.',cats:['pronoia'],tools:[],links:[['ΟΠΕΚΑ','https://www.opeka.gr/']],tel:[]},
+ {id:'ygeia',ic:'🩺',t:'ΕΟΠΥΥ & Υγεία',d:'Φαρμακεία ΕΟΠΥΥ & ακριβά φάρμακα (ΦΥΚ), συμμετοχή, γυαλιά, αναλώσιμα, θεραπείες, εξετάσεις, νοσηλεία, εξωτερικό (S2), προσωπικός γιατρός, myHealth.',cats:['ygeia'],tools:[],links:[['ΕΟΠΥΥ','https://www.eopyy.gov.gr/'],['ΗΔΙΚΑ','https://www.idika.gr/']],tel:[['1566','Ραντεβού σε γιατρούς ΕΟΠΥΥ']]},
+ {id:'ekp',ic:'🎓',t:'Εκπαίδευση',d:'Τίτλοι σπουδών, ΔΟΑΤΑΠ, μηχανογραφικό, πάσο, σίτιση/στέγαση, εγγραφές.',cats:['ekpaidefsi'],tools:[],links:[],tel:[]},
+ {id:'epix',ic:'🏢',t:'Επιχειρήσεις (ΓΕΜΗ / Επιμελητήριο)',d:'Έναρξη, ΚΑΔ, ίδρυση εταιρείας, πιστοποιητικά ΓΕΜΗ, γνωστοποίηση λειτουργίας, myDATA.',cats:['epixeiriseis'],tools:['vat','afm'],links:[['ΓΕΜΗ','https://www.businessregistry.gr/']],tel:[]},
+ {id:'energ',ic:'⚡',t:'ΔΕΗ / Ρεύμα / ΔΕΔΔΗΕ & Φυσικό αέριο',d:'Νέα σύνδεση, αλλαγή ονόματος/παρόχου, βλάβες & διακοπές, ενστάσεις λογαριασμών, ρυθμίσεις, ΚΟΤ, φωτοβολταϊκά, φυσικό αέριο.',cats:['energeia'],tools:['bill'],links:[['ΔΕΔΔΗΕ (δίκτυο, βλάβες, νέες συνδέσεις)','https://deddie.gr/'],['ΔΕΗ','https://www.dei.gr/']],tel:[]},
+ {id:'nero',ic:'💧',t:'Νερό (ΕΥΔΑΠ / ΕΥΑΘ / ΔΕΥΑ)',d:'Υδροδότηση, αποχέτευση, αλλαγή ονόματος, βλάβες/διαρροές, ενστάσεις λογαριασμών, κοινωνικό τιμολόγιο, ρυθμίσεις.',cats:['nero'],tools:['bill'],links:[['ΕΥΔΑΠ','https://www.eydap.gr/'],['ΕΥΑΘ','https://www.eyath.gr/']],tel:[]},
+ {id:'tel',ic:'📡',t:'Τηλεφωνία & Internet',d:'Νέα σύνδεση, φορητότητα αριθμού, αλλαγή παρόχου, καταγγελία σύμβασης, βλάβες, ταυτοποίηση καρτοκινητής, παράπονα ΕΕΤΤ.',cats:['tilepikoinonies'],tools:['bill'],links:[['ΕΕΤΤ','https://www.eett.gr/']],tel:[]}
+];
+function agSvcs(a){return SVC.filter(s=>a.cats.includes(s.cat)||(a.ch&&s.channels.includes(a.ch)&&s.cat!=='trapeza'))}
+let curAg=null;
+function rAg(){$('#agTiles').innerHTML=AG.map(a=>`<div class="card tile" data-ag="${a.id}"><span class="ic">${a.ic}</span><div><b>${a.t}</b><div class="tiny">${agSvcs(a).length} υπηρεσίες${a.tools.length?' · '+a.tools.length+' εργαλεία':''}</div><div class="muted small">${a.d}</div></div></div>`).join('');if(curAg)openAg(curAg,true)}
+function openAg(id,keep){const a=AG.find(x=>x.id===id);if(!a)return;curAg=id;
+  if(!$('#pg-agency').classList.contains('on')){go('agency');return}
+  const L=agSvcs(a).sort((x,y)=>x.title.localeCompare(y.title,'el'));
+  $('#agOut').innerHTML=`<div class="card" style="border-color:var(--red)"><div class="row"><span style="font-size:34px">${a.ic}</span><div style="flex:1"><h2 style="margin:0">Γκισέ: ${a.t}</h2><div class="muted small">${a.d}</div></div><button class="btn g sm" id="agBack">← Όλα τα γκισέ</button></div>
+   <div class="row" style="margin-top:10px">${a.links.map(l=>`<a class="btn sm" href="${l[1]}" target="_blank" rel="noopener">🌐 ${esc(l[0])} ↗</a>`).join('')}${a.tel.map(p=>`<a class="btn g sm" href="tel:${p[0]}">📞 ${p[0]} · ${esc(p[1])}</a>`).join('')}</div>${['energ','nero','tel'].includes(a.id)?`<div class="row" style="margin-top:8px">${(window.KEP_UTIL_CONTACTS||[]).filter(c=>c.tel&&({energ:/ΔΕΗ|ΔΕΔΔΗΕ|αέρ|Enaon|ΕΔΑ|ΡΑΑΕΥ|ρεύμ/i,nero:/ΕΥΔΑΠ|ΕΥΑΘ|ΔΕΥΑ|νερ/i,tel:/Cosmote|Vodafone|Nova|ΕΕΤΤ|ΟΤΕ|SMS|απάτ/i}[a.id]).test(c.org)).map(c=>`<a class="btn g sm" href="tel:${esc(String(c.tel).replace(/\s/g,''))}">📞 ${esc(c.tel)} · ${esc(c.org)}</a>`).join('')}</div>`:''}</div>
+   ${a.tools.length?`<h3>🧮 Κάν' το εδώ, τώρα</h3><div class="grid g2" id="agTools">${a.tools.map(t=>toolCard(t)).join('')}</div>`:''}
+   <h3>📋 Υπηρεσίες του γκισέ (${L.length})</h3><input class="inp" id="agQ" placeholder="🔎 Φίλτρο σε αυτό το γκισέ" style="max-width:340px;margin-bottom:10px"><div class="grid g2" id="agList">${L.map(s=>card(s)).join('')}</div>`;
+  if($('#agTools'))initTools($('#agTools'));
+  $('#agBack').onclick=()=>{curAg=null;$('#agOut').innerHTML='';$('#agTiles').classList.remove('hide');window.scrollTo(0,0)};
+  $('#agQ').oninput=()=>{const q=$('#agQ').value,ids=new Set(L.map(s=>s.id));$('#agList').innerHTML=search(q).filter(s=>ids.has(s.id)).map(s=>card(s,q)).join('')};
+  $('#agTiles').classList.add('hide');if(!keep)window.scrollTo(0,0)}
+document.addEventListener('click',e=>{const t=e.target.closest('[data-ag]');if(t)openAg(t.dataset.ag)});
+
+/* ================= TOOLS ================= */
+const T=()=>window.KEP_TOOLS||{};
+const BANKS={'010':'Τράπεζα της Ελλάδος','011':'Εθνική Τράπεζα','014':'Alpha Bank','016':'Attica Bank','017':'Τράπεζα Πειραιώς','026':'Eurobank'};
+function mod97(str){let r=0;for(const ch of str){r=(r*10+ +ch)%97}return r}
+function alnumToNum(s){return s.toUpperCase().split('').map(c=>/[A-Z]/.test(c)?(c.charCodeAt(0)-55).toString():c).join('')}
+function ibanCheck(v){v=v.replace(/\s+/g,'').toUpperCase();if(!/^[A-Z]{2}\d{2}[A-Z0-9]+$/.test(v))return[false,'Μη έγκυρη μορφή'];
+  if(v.startsWith('GR')&&v.length!==27)return[false,'Το ελληνικό IBAN έχει 27 χαρακτήρες (έχεις '+v.length+')'];
+  if(mod97(alnumToNum(v.slice(4)+v.slice(0,4)))!==1)return[false,'Λάθος ψηφίο ελέγχου — κάποιος χαρακτήρας είναι λάθος'];
+  let info='Έγκυρο IBAN ('+v.slice(0,2)+')';if(v.startsWith('GR')){const b=v.slice(4,7);info+=' · κωδ. τράπεζας '+b+(BANKS[b]?' – '+BANKS[b]:'')+' · κατάστημα '+v.slice(7,11)}
+  return[true,info+'<br><span class="tiny">'+v.replace(/(.{4})/g,'$1 ').trim()+'</span>']}
+function afmCheck(v){v=v.replace(/\D/g,'');if(v.length!==9)return[false,'Ο ΑΦΜ έχει 9 ψηφία'];if(/^0+$/.test(v))return[false,'Μη έγκυρος'];let s=0;for(let i=0;i<8;i++)s+=+v[i]*Math.pow(2,8-i);return (s%11)%10===+v[8]?[true,'Έγκυρος ΑΦΜ (σωστό ψηφίο ελέγχου)']:[false,'Λάθος ψηφίο ελέγχου — ο ΑΦΜ δεν είναι έγκυρος']}
+function luhn(v){let s=0,alt=false;for(let i=v.length-1;i>=0;i--){let n=+v[i];if(alt){n*=2;if(n>9)n-=9}s+=n;alt=!alt}return s%10===0}
+function amkaCheck(v){v=v.replace(/\D/g,'');if(v.length!==11)return[false,'Ο ΑΜΚΑ έχει 11 ψηφία'];if(!luhn(v))return[false,'Λάθος ψηφίο ελέγχου — ο ΑΜΚΑ δεν είναι έγκυρος'];
+  const d=+v.slice(0,2),m=+v.slice(2,4);return[true,'Έγκυρος ΑΜΚΑ'+(d>=1&&d<=31&&m>=1&&m<=12?` · ημ. γέννησης ${v.slice(0,2)}/${v.slice(2,4)}/..${v.slice(4,6)}`:'')]}
+function rfCheck(v){v=v.replace(/\s+/g,'').toUpperCase();if(!/^RF\d{2}[A-Z0-9]{1,21}$/.test(v))return[false,'Ο κωδικός RF ξεκινά με «RF» + 2 ψηφία ελέγχου + έως 21 χαρακτήρες'];return mod97(alnumToNum(v.slice(4)+v.slice(0,4)))===1?[true,'Έγκυρος κωδικός πληρωμής RF (ISO 11649)']:[false,'Λάθος ψηφία ελέγχου — ξαναπληκτρολόγησέ τον']}
+function res(o,r){o.innerHTML=`<div class="notice ${r[0]?'ok':'r'}" style="margin-top:8px">${r[0]?'✔':'✖'} ${r[1]}</div>`}
+const TOOLS={
+ iban:{t:'🏦 Έλεγχος IBAN',b:`<input class="inp" data-in placeholder="GR.. .... .... .... .... .... ..."><div data-out></div>`,run:(i,o)=>i.value?res(o,ibanCheck(i.value)):o.innerHTML=''},
+ afm:{t:'🔢 Έλεγχος ΑΦΜ',b:`<input class="inp" data-in inputmode="numeric" placeholder="9 ψηφία"><div data-out></div>`,run:(i,o)=>i.value?res(o,afmCheck(i.value)):o.innerHTML=''},
+ amka:{t:'🆔 Έλεγχος ΑΜΚΑ',b:`<input class="inp" data-in inputmode="numeric" placeholder="11 ψηφία"><div data-out></div>`,run:(i,o)=>i.value?res(o,amkaCheck(i.value)):o.innerHTML=''},
+ rf:{t:'🧾 Έλεγχος κωδικού πληρωμής RF',b:`<input class="inp" data-in placeholder="RF.. (ΑΑΔΕ, ΕΦΚΑ, λογαριασμοί)"><div data-out></div>`,run:(i,o)=>i.value?res(o,rfCheck(i.value)):o.innerHTML=''},
+ loan:{t:'🏠 Υπολογιστής δόσης δανείου',b:`<div class="fgrid"><label class="f">Ποσό (€)<input class="inp" data-l="p" type="number" value="100000"></label><label class="f">Επιτόκιο % ετήσιο<input class="inp" data-l="r" type="number" step="0.01" value="3.5"></label><label class="f">Διάρκεια (έτη)<input class="inp" data-l="y" type="number" value="25"></label></div><div data-out></div>`,
+  run:(i,o,box)=>{const g=k=>+box.querySelector(`[data-l=${k}]`).value||0;const P=g('p'),r=g('r')/1200,n=g('y')*12;if(!P||!n)return o.innerHTML='';const m=r?P*r/(1-Math.pow(1+r,-n)):P/n;
+   o.innerHTML=`<div class="grid g3" style="margin-top:8px"><div class="card stat"><span class="n" style="font-size:20px">${eur(m)}</span><span class="tiny">μηνιαία δόση</span></div><div class="card stat"><span class="n" style="font-size:20px">${eur(m*n-P)}</span><span class="tiny">σύνολο τόκων</span></div><div class="card stat"><span class="n" style="font-size:20px">${eur(m*n)}</span><span class="tiny">σύνολο αποπληρωμής</span></div></div><div class="tiny">Τοκοχρεωλυτικό, σταθερό επιτόκιο. Δεν περιλαμβάνει εισφορά Ν.128/75, ασφάλιστρα, έξοδα φακέλου.</div>`}},
+ akat:{t:'🛡️ Ακατάσχετος λογαριασμός',b:`<div data-out></div>`,run:(i,o)=>{if(window.KEP_AKAT)return o.innerHTML=akatHTML(true);const a=T().akatasxeto;o.innerHTML=a&&(a.wages||a.deposit)?`<div class="small">Ακατάσχετο μισθού/σύνταξης: <b>${a.wages?eur(a.wages):'—'}</b> / μήνα · καταθέσεων: <b>${a.deposit?eur(a.deposit):'—'}</b><br><span class="tiny">${esc(a.note||'')}</span></div>`:'<div class="small">Κάθε πολίτης δικαιούται <b>έναν</b> ακατάσχετο λογαριασμό, που δηλώνεται στην τράπεζά του. Δες την αντίστοιχη υπηρεσία για ποσά & διαδικασία.</div>'}},
+ vat:{t:'🧮 Υπολογιστής ΦΠΑ',b:`<div class="fgrid"><label class="f">Ποσό (€)<input class="inp" data-l="a" type="number" value="100"></label><label class="f">Συντελεστής %<select class="inp" data-l="v"><option>24</option><option>13</option><option>6</option><option>17</option><option>9</option><option>4</option></select></label><label class="f">Το ποσό είναι<select class="inp" data-l="m"><option value="net">καθαρό (χωρίς ΦΠΑ)</option><option value="gross">τελικό (με ΦΠΑ)</option></select></label></div><div data-out></div>`,
+  run:(i,o,box)=>{const g=k=>box.querySelector(`[data-l=${k}]`).value;const a=+g('a')||0,v=+g('v')/100;const net=g('m')==='net'?a:a/(1+v);o.innerHTML=`<div class="small" style="margin-top:8px">Καθαρό: <b>${eur(net)}</b> · ΦΠΑ ${g('v')}%: <b>${eur(net*v)}</b> · Σύνολο: <b>${eur(net*(1+v))}</b><div class="tiny">24/13/6% κανονικοί · 17/9/4% μειωμένοι (ορισμένα νησιά)</div></div>`}},
+ fma:{t:'🏡 Φόρος μεταβίβασης ακινήτου (ΦΜΑ)',b:`<label class="f">Φορολογητέα αξία (αντικειμενική ή τίμημα, η μεγαλύτερη) €<input class="inp" data-l="a" type="number" value="100000"></label><div data-out></div>`,
+  run:(i,o,box)=>{const a=+box.querySelector('[data-l=a]').value||0;const f=a*.03,d=f*.03;o.innerHTML=`<div class="small" style="margin-top:8px">ΦΜΑ 3%: <b>${eur(f)}</b> + υπέρ ΟΤΑ 3% επί του φόρου: <b>${eur(d)}</b> = <b>${eur(f+d)}</b><div class="tiny">Ενδεικτικά. Δεν περιλαμβάνει συμβολαιογράφο, Κτηματολόγιο/υποθηκοφυλακείο, δικηγόρο, μηχανικό. Νεόδμητα (ΦΠΑ/αναστολή) και απαλλαγή πρώτης κατοικίας έχουν ειδικούς κανόνες.</div></div>`}},
+ tax:{t:'💶 Φόρος εισοδήματος μισθωτού/συνταξιούχου (κλίμακα 2026)',b:`<div class="fgrid"><label class="f">Ετήσιο φορολογητέο εισόδημα (€)<input class="inp" data-l="a" type="number" value="20000"></label><label class="f">Εξαρτώμενα τέκνα<input class="inp" data-l="k" type="number" value="0" min="0"></label><label class="f">Ηλικία<select class="inp" data-l="y"><option value="">άνω των 30</option><option value="25">έως 25</option><option value="30">26–30</option></select></label></div><div data-out></div>`,
+  run:(i,o,box)=>{const tx=T().tax2026;if(!tx||!tx.scale)return o.innerHTML='<div class="tiny">Δεν υπάρχουν επιβεβαιωμένα στοιχεία κλίμακας.</div>';const g=k=>box.querySelector(`[data-l=${k}]`).value;const a=+g('a')||0,k=Math.max(0,+g('k')||0),y=g('y');
+   const ck=k>=4?'4+':String(k),cr=tx.childRates||{};
+   const rates=tx.scale.map((x,j)=>{let r=x[1];const band=cr['b'+(j+1)];if(band&&band[ck]!=null)r=band[ck];if(y==='25'&&j<2)r=0;if(y==='30'&&j===1)r=Math.min(r,9);return[x[0],r]});
+   let prev=0,tax=0,rows=[];for(const[up,rate]of rates){const lim=up==null?Infinity:+up;const part=Math.max(0,Math.min(a,lim)-prev);if(part>0){tax+=part*rate/100;rows.push(`${eur(prev)} – ${lim===Infinity?'…':eur(lim)}: ${rate}% → ${eur(part*rate/100)}`)}prev=lim;if(a<=lim)break}
+   const rt=tx.reductionTable||[];let red=0;if(rt.length){const last=rt[rt.length-1];red=k>last[0]?last[1]+(k-last[0])*(tx.reductionExtraPerChild||0):(rt.find(x=>x[0]===k)||[0,0])[1];if(k<5&&a>12000)red=Math.max(0,red-(a-12000)/1000*20)}
+   const fin=Math.max(0,tax-red);o.innerHTML=`<div class="small" style="margin-top:8px">${rows.join('<br>')}<br>Φόρος κλίμακας: <b>${eur(tax)}</b> · μείωση φόρου (άρθρο 16 ΚΦΕ): <b>−${eur(Math.min(red,tax))}</b><br>Εκτιμώμενος ετήσιος φόρος: <b style="font-size:17px">${eur(fin)}</b> <span class="tiny">(≈ ${eur(fin/14)} ανά μισθοδοσία ×14)</span><div class="tiny">${esc(tx.note||'')} Ενδεικτικός υπολογισμός — η ακριβής εκκαθάριση γίνεται από την ΑΑΔΕ (30% ηλεκτρονικές δαπάνες, τεκμήρια, ειδικές διατάξεις).</div></div>`}},
+ efka:{t:'🛡️ Εισφορές ελεύθερων επαγγελματιών',b:`<div data-out></div>`,run:(i,o)=>{const e=T().efka2026;o.innerHTML=e&&e.categories?`<table class="t"><tr><th>Κατηγορία</th><th>Μηνιαία</th><th></th></tr>${e.categories.map(c=>`<tr><td>${esc(c.cat)}</td><td><b>${c.monthly?eur(c.monthly):'—'}</b></td><td class="tiny">${esc(c.parts||'')}</td></tr>`).join('')}</table>${e.newProfessionals?`<div class="small" style="margin-top:6px">Νέοι επαγγελματίες (πρώτα 5 έτη): <b>${eur(e.newProfessionals.monthly)}</b></div>`:''}${e.extras?`<div class="tiny">${esc(e.extras.note)}</div>`:''}<div class="tiny">${esc(e.note||'')}</div>${T().min_wage_2026?`<div class="small" style="margin-top:6px">Κατώτατος μισθός: <b>${eur(T().min_wage_2026.monthly)}</b> / μήνα · ημερομίσθιο <b>${eur(T().min_wage_2026.daily)}</b></div>`:''}`:'<div class="tiny">Δες την υπηρεσία «εισφορές μη μισθωτών».</div>'}},
+ days:{t:'📆 Ημέρες μεταξύ ημερομηνιών',b:`<div class="fgrid"><label class="f">Από<input class="inp" type="date" data-l="a"></label><label class="f">Έως<input class="inp" type="date" data-l="b"></label></div><div data-out></div>`,
+  run:(i,o,box)=>{const a=box.querySelector('[data-l=a]').value,b=box.querySelector('[data-l=b]').value;if(!a||!b)return o.innerHTML='';const A=new Date(a+'T00:00:00'),B=new Date(b+'T00:00:00');const d=Math.round((B-A)/864e5);let w=0;for(let x=new Date(A);x<B;x.setDate(x.getDate()+1)){const g=x.getDay();if(g&&g!==6)w++}o.innerHTML=`<div class="small" style="margin-top:8px"><b>${d}</b> ημερολογιακές ημέρες · <b>${w}</b> εργάσιμες (χωρίς αργίες)</div>`}},
+ deadline:{t:'⏳ Υπολογισμός προθεσμίας',b:`<div class="fgrid"><label class="f">Αφετηρία (π.χ. επίδοση)<input class="inp" type="date" data-l="a"></label><label class="f">Προθεσμία<input class="inp" type="number" data-l="n" value="30" min="1"></label><label class="f">Μονάδα<select class="inp" data-l="u"><option value="d">ημέρες</option><option value="m">μήνες</option></select></label><label class="f row" style="flex-direction:row;gap:6px;align-items:center"><input type="checkbox" data-l="aug" style="accent-color:var(--red)"> Αναστολή Αυγούστου</label></div><div data-out></div>`,
+  run:(i,o,box)=>{const g=k=>box.querySelector(`[data-l=${k}]`);const a=g('a').value;if(!a)return o.innerHTML='';const n=+g('n').value||0,aug=g('aug').checked;let d=new Date(a+'T00:00:00');
+   if(g('u').value==='m'){d.setMonth(d.getMonth()+n);if(aug){const s=new Date(a+'T00:00:00');for(let y=s.getFullYear();y<=d.getFullYear();y++){const au=new Date(y,7,1);if(au>s&&au<=d)d.setDate(d.getDate()+31)}}}
+   else{let c=0;while(c<n){d.setDate(d.getDate()+1);if(aug&&d.getMonth()===7)continue;c++}}
+   let moved='';while(d.getDay()===0||d.getDay()===6){d.setDate(d.getDate()+1);moved=' (μεταφέρθηκε στην επόμενη εργάσιμη)'}
+   o.innerHTML=`<div class="small" style="margin-top:8px">Λήξη προθεσμίας: <b style="font-size:17px">${d.toLocaleDateString('el-GR',{weekday:'long',day:'2-digit',month:'2-digit',year:'numeric'})}</b>${moved}<div class="tiny">Ενδεικτικά: η ημέρα αφετηρίας δεν υπολογίζεται· αργίες δεν λαμβάνονται υπόψη. Για ένδικα μέσα συμβουλέψου δικηγόρο.</div></div>`}}
+};
+TOOLS.bill={t:'🧾 Εκτίμηση λογαριασμού (ρεύμα / νερό / τηλεφωνία)',b:`<div class="fgrid"><label class="f">Κατανάλωση (kWh ή m³ ή — )<input class="inp" data-l="q" type="number" value="400"></label><label class="f">Τιμή μονάδας (€)<input class="inp" data-l="u" type="number" step="0.001" value="0.15"></label><label class="f">Πάγιο / μήνα-περίοδο (€)<input class="inp" data-l="f" type="number" step="0.01" value="5"></label><label class="f">Ρυθμιζόμενες χρεώσεις & τέλη (€)<input class="inp" data-l="r" type="number" step="0.01" value="20"></label><label class="f">ΦΠΑ %<select class="inp" data-l="v"><option>6</option><option>13</option><option>24</option></select></label></div><div data-out></div>`,
+ run:(i,o,box)=>{const g=k=>+box.querySelector(`[data-l=${k}]`).value||0;const net=g('q')*g('u')+g('f')+g('r');o.innerHTML=`<div class="small" style="margin-top:8px">Προ ΦΠΑ: <b>${eur(net)}</b> · ΦΠΑ ${g('v')}%: <b>${eur(net*g('v')/100)}</b> · Σύνολο: <b style="font-size:17px">${eur(net*(1+g('v')/100))}</b><div class="tiny">Βάλε τις τιμές από το τιμολόγιο/προσφορά του παρόχου για να συγκρίνεις. Ρεύμα: ΦΠΑ 6% στην κατανάλωση (ενδεικτικά)· ΕΡΤ/δημοτικά τέλη στον λογαριασμό ρεύματος δεν υπόκεινται σε ΦΠΑ και δεν συμπεριλαμβάνονται. Τηλεφωνία: ΦΠΑ 24%.</div></div>`}};
+function toolCard(id){const t=TOOLS[id];if(!t)return'';return `<div class="card" data-tool="${id}"><b>${t.t}</b><div style="margin-top:8px">${t.b}</div></div>`}
+function runTool(box){const t=TOOLS[box.dataset.tool];if(t)t.run(box.querySelector('[data-in]'),box.querySelector('[data-out]'),box)}
+document.addEventListener('input',e=>{const box=e.target.closest('[data-tool]');if(box)runTool(box)});
+document.addEventListener('change',e=>{const box=e.target.closest('[data-tool]');if(box)runTool(box)});
+function initTools(root){root.querySelectorAll('[data-tool]').forEach(runTool)}
+function rTools(){$('#toolsBox').innerHTML=Object.keys(TOOLS).map(toolCard).join('');initTools($('#toolsBox'))}
+
+/* ================= NEWS ================= */
+const NST={'ανοιχτές αιτήσεις':'open','πληρωμή':'pay','προσεχώς':'soon','έληξε':'done','μόνιμο':'perm'};
+let newsF='';
+function akatHTML(short){const a=window.KEP_AKAT;if(!a)return'';
+  return `<div class="small"><b>Καταθέσεις:</b> ${a.deposit?eur(a.deposit):'—'} / μήνα ${a.depositValidFrom?'<span class="tiny">(ισχύς από '+esc(/^[0-9]{4}-/.test(a.depositValidFrom)?fmtD(a.depositValidFrom):a.depositValidFrom)+')</span>':''} · <b>Μισθός/σύνταξη:</b> ${a.wages?eur(a.wages):'—'}<br>
+  ${a.appliesTo?`<b>Προστατεύει απέναντι σε:</b> ${esc(a.appliesTo)}<br>`:''}${a.publicBasis?`<b>Δημόσιο/ΕΦΚΑ:</b> ${esc(a.publicBasis)}<br>`:''}${a.privateBasis?`<b>Ιδιώτες/τράπεζες:</b> ${esc(a.privateBasis)}`:''}
+  ${short?'':`${a.joint?`<br><b>Κοινός λογαριασμός:</b> ${esc(a.joint)}`:''}${(a.howTo||[]).length?`<h3>Πώς τον δηλώνω</h3><ol class="steps">${a.howTo.map(x=>`<li>${esc(x)}</li>`).join('')}</ol>`:''}${(a.notes||[]).length?`<ul>${a.notes.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`:''}${a.disputed?`<div class="notice" style="margin-top:6px">ℹ️ ${esc(a.disputed)}</div>`:''}${(a.srcs||[]).length?`<div class="tiny" style="margin-top:6px">Πηγές: ${a.srcs.map(u=>`<a href="${esc(u)}" target="_blank" rel="noopener">${esc(String(u).replace(/^https?:\/\/(www\.)?/,'').slice(0,45))}</a>`).join(' · ')}</div>`:''}`}</div>`}
+function rNews(){const N=(window.KEP_NEWS||[]).slice().sort((a,b)=>String(b.date).localeCompare(String(a.date)));
+  $('#newsAsOf').textContent=window.KEP_NEWS_ASOF?'Ενημέρωση: '+window.KEP_NEWS_ASOF:'';
+  const sts=[...new Set(N.map(n=>n.status))];
+  $('#newsF').innerHTML=`<span class="chip ${newsF?'':'on'}" data-nf="">Όλα (${N.length})</span>`+sts.map(x=>`<span class="chip ${newsF===x?'on':''}" data-nf="${esc(x)}">${esc(x)} (${N.filter(n=>n.status===x).length})</span>`).join('');
+  $('#akatBox').innerHTML=window.KEP_AKAT?`<details class="card" style="margin-bottom:12px" open><summary style="cursor:pointer;font-weight:700">🛡️ Ακατάσχετος λογαριασμός — τι ισχύει σήμερα</summary><div style="margin-top:8px">${akatHTML(false)}</div></details>`:'';
+  const q=norm($('#newsQ').value);
+  const L=N.filter(n=>(!newsF||n.status===newsF)&&(!q||norm([n.title,n.body,n.amount].join(' ')).includes(q)));
+  $('#newsList').innerHTML=L.length?L.map(n=>`<div class="card news"><div class="row"><span class="d">${n.date?fmtD(n.date):''}${n.until?' → '+fmtD(n.until):''}</span><div class="sp"></div><span class="st ${NST[n.status]||'done'}">${esc(n.status||'')}</span></div>
+   <div style="font-weight:700;margin:4px 0">${CATS[n.cat]?CATS[n.cat][0]+' ':''}${esc(n.title)}</div><div class="small muted">${esc(n.body)}</div>${n.amount?`<div class="small" style="margin-top:4px">💶 <b>${esc(n.amount)}</b></div>`:''}
+   <div class="row" style="margin-top:8px">${n.url?`<a class="btn sm" href="${esc(n.url)}" target="_blank" rel="noopener">🌐 Επίσημη σελίδα ↗</a>`:''}<button class="btn g sm" data-remnews="${esc(n.id)}">🔔 Υπενθύμιση</button></div></div>`).join(''):'<div class="card muted">Καμία ενημέρωση.</div>'}
+document.addEventListener('click',e=>{const f=e.target.closest('[data-nf]');if(f){newsF=f.dataset.nf;rNews()}
+  const r=e.target.closest('[data-remnews]');if(r){const n=(window.KEP_NEWS||[]).find(x=>x.id===r.dataset.remnews);if(!n)return;const d=n.until||n.date;if(!d)return toast('Δεν υπάρχει ημερομηνία');S.rem.push({id:uid(),title:n.title,date:d,before:3});save();toast('Προστέθηκε υπενθύμιση για '+fmtD(d))}});
+$('#newsQ').addEventListener('input',rNews);
+
+/* ================= DISPLAY: font size, fullscreen ================= */
+function applyFs(){document.documentElement.style.setProperty('--fs',S.fs||1)}
+$('#fsUp').onclick=()=>{S.fs=Math.min(1.4,Math.round(((S.fs||1)+.1)*10)/10);applyFs();save()};
+$('#fsDown').onclick=()=>{S.fs=Math.max(.85,Math.round(((S.fs||1)-.1)*10)/10);applyFs();save()};
+$('#fullBtn').onclick=()=>{const d=document;if(d.fullscreenElement||d.webkitFullscreenElement){(d.exitFullscreen||d.webkitExitFullscreen).call(d)}else{const el=d.documentElement;(el.requestFullscreen||el.webkitRequestFullscreen||function(){toast('Η πλήρης οθόνη δεν υποστηρίζεται εδώ')}).call(el)}};
+applyFs();
+
+/* ================= PROFILE ================= */
+function rProfile(){$('#profFields').innerHTML=PF.map(p=>`<label class="f">${p[1]}<input class="inp" data-p="${p[0]}" type="${p[2]||'text'}" value="${esc(S.profile[p[0]]||'')}"></label>`).join('')+
+ `<label class="f">Επωνυμία γραφείου (ιδιωτικό ΚΕΠ)<input class="inp" data-p="office" value="${esc(S.profile.office||'')}"></label><label class="f">ΑΦΜ γραφείου<input class="inp" data-p="officeAfm" value="${esc(S.profile.officeAfm||'')}"></label>`}
+$('#profSave').onclick=()=>{$$('[data-p]').forEach(i=>S.profile[i.dataset.p]=i.value.trim());save();toast('Αποθηκεύτηκε το προφίλ')};
+$('#bkOut').onclick=()=>dl('gkise360-backup-'+new Date().toISOString().slice(0,10)+'.json',JSON.stringify(S,null,1),'application/json');
+$('#bkIn').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(typeof d!=='object')throw 0;S=Object.assign({profile:{},cases:[],clients:[],prices:null,rem:[],fav:[],checks:{},notes:{}},d);save();toast('Έγινε επαναφορά');go('home')}catch(x){toast('Μη έγκυρο αρχείο')}};r.readAsText(f)};
+$('#wipe').onclick=function(){if(this.dataset.c){localStorage.removeItem(KEY);S={profile:{},cases:[],clients:[],prices:null,rem:[],fav:[],checks:{},notes:{}};this.dataset.c='';this.textContent='🗑️ Διαγραφή όλων';toast('Διαγράφηκαν όλα');go('home')}else{this.dataset.c=1;this.textContent='⚠️ Σίγουρα; Πάτα ξανά';setTimeout(()=>{this.dataset.c='';this.textContent='🗑️ Διαγραφή όλων'},4000)}};
+
+/* ================= PWA ================= */
+let deferred;window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferred=e;$('#installBtn').classList.remove('hide')});
+$('#installBtn').onclick=async()=>{if(!deferred)return;deferred.prompt();await deferred.userChoice;deferred=null;$('#installBtn').classList.add('hide')};
+if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('sw.js').catch(()=>{});
+
+/* ================= boot ================= */
+const start=(location.hash||'#home').slice(1);go(['home','news','agency','tools','services','life','forms','cases','office','dates','contacts','profile'].includes(start)?start:'home');
+</script>
+</body>
+</html>
