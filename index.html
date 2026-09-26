@@ -228,6 +228,7 @@ html,body{font-size:calc(15px * var(--fs,1))}
   <div id="homeNews"></div>
   <h3>🏢 Διάλεξε γκισέ</h3>
   <div class="grid g4" id="homeAg"></div>
+  <div id="homeSis" style="margin-top:14px"></div>
   <h3>Κατηγορίες</h3>
   <div class="grid g3" id="catTiles"></div>
   <h3>Τα 4 «κλειδιά» για να τα κάνεις όλα online</h3>
@@ -489,6 +490,7 @@ function openSvc(id){const s=byId(id);if(!s)return;const fav=S.fav.includes(id);
      ${s.url?`<a class="btn" href="${esc(s.url)}" target="_blank" rel="noopener">🌐 Κάν' το τώρα (επίσημη υπηρεσία)</a>`:''}
      ${s.channels.includes('mykeplive')?`<a class="btn g" href="https://mykeplive.gov.gr/" target="_blank" rel="noopener">🎥 myKEPlive</a>`:''}
      ${s.channels.includes('kep')?`<a class="btn g" href="https://rantevou.kep.gov.gr/" target="_blank" rel="noopener">📅 Ραντεβού ΚΕΠ</a>`:''}
+     ${sisLinks(s)}
      <button class="btn g" id="mCase">🗂️ Νέα υπόθεση</button>
      <button class="btn g" id="mFav">${fav?'★ Αφαίρεση':'☆ Αγαπημένο'}</button>
      <button class="btn g" id="mPrint">🖨️ Οδηγίες</button>
@@ -510,6 +512,7 @@ const KEYS=[
 function rHome(){
   const HN=(window.KEP_NEWS||[]).filter(n=>n.status==='ανοιχτές αιτήσεις'||n.status==='πληρωμή').sort((a,b)=>String(b.date).localeCompare(String(a.date))).slice(0,4);
   $('#homeNews').innerHTML=HN.length?`<h3>📰 Τώρα τρέχουν <button class="btn g sm" data-go="news" style="margin-left:8px">Όλες οι ενημερώσεις →</button></h3><div class="grid g2">${HN.map(n=>`<div class="card news tile" data-go="news"><div style="flex:1"><div class="row"><span class="d">${fmtD(n.date)}</span><div class="sp"></div><span class="st ${NST[n.status]}">${esc(n.status)}</span></div><b>${esc(n.title)}</b>${n.amount?`<div class="small">💶 ${esc(n.amount)}</div>`:''}</div></div>`).join('')}</div>`:'';
+  $('#homeSis').innerHTML=SIS_CARD;
   $('#homeAg').innerHTML=AG.map(a=>`<div class="card tile" data-ag="${a.id}"><span class="ic">${a.ic}</span><div><b>${a.t}</b><span class="tiny">${agSvcs(a).length} υπηρεσίες</span></div></div>`).join('');
   $('#popChips').innerHTML=POP.map(p=>`<span class="chip" data-q="${esc(p)}">${esc(p)}</span>`).join('');
   const cnt={};SVC.forEach(s=>cnt[s.cat]=(cnt[s.cat]||0)+1);
@@ -562,6 +565,7 @@ document.addEventListener('click',e=>{const t=e.target.closest('[data-life]');if
   $('#lifeOut').innerHTML=`<div class="card"><h3 style="margin-top:0">${l.ic} ${l.t} — τι κάνω, με τη σειρά</h3>
    <div class="wiz">${list.map((s,i)=>`<div class="wstep" data-svc="${s.id}" style="cursor:pointer"><span class="n">${i+1}</span><div style="flex:1"><b>${esc(s.title)}</b><div class="muted small">${esc(s.what)}</div>${badges(s)}</div></div>`).join('')||'<div class="muted">—</div>'}</div>
    ${l.tips.length?`<h3>💡 Χρήσιμο να ξέρεις</h3><ul>${l.tips.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`:''}
+   ${/Απεβίωσε|Κληρονόμησα|Αγοράζω σπίτι|Χτίζω|δικαστική/.test(l.t)?`<div class="row" style="margin-bottom:8px"><a class="btn g sm" href="${nomoURL(/Απεβίωσε|Κληρονόμησα/.test(l.t)?'κληρονομιά':/δικαστική/.test(l.t)?'αγωγή':'ακίνητο')}" target="_blank" rel="noopener">⚖️ ΝΟΜΟΠΥΞΙΔΑ ↗</a>${/Απεβίωσε|Κληρονόμησα|Αγοράζω σπίτι/.test(l.t)?`<a class="btn g sm" href="${gkURL(/Απεβίωσε/.test(l.t)?'inherit':/Κληρονόμησα/.test(l.t)?'inherit':'sale')}" target="_blank" rel="noopener">🌾 ΓΗ &amp; ΚΛΗΡΟΝΟΜΙΑ ↗</a>`:''}</div>`:''}
    <div class="row"><button class="btn g sm" id="lifePrint">🖨️ Εκτύπωση λίστας</button><button class="btn g sm" id="lifeCase">🗂️ Όλα ως υποθέσεις</button></div></div>`;
   $('#lifePrint').onclick=()=>printHTML(`<div class="doc"><h1>${l.t}</h1><div class="c">Λίστα ενεργειών · ΓΚΙΣΕ 360°</div><ol>${list.map(s=>`<li><b>${esc(s.title)}</b> — ${esc(s.what)}<br><small>Δικαιολογητικά: ${esc(s.docs.join(' · '))}</small><br><small>${esc(s.url||'')}</small></li>`).join('')}</ol><ul>${l.tips.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`);
   $('#lifeCase').onclick=()=>{list.forEach(s=>S.cases.push(newCase(s)));save();toast('Προστέθηκαν '+list.length+' υποθέσεις');};
@@ -743,7 +747,7 @@ const CONTACTS=[
  ['🚗 Μεταφορές & Αστυνομία',[['Υπουργείο Υποδομών & Μεταφορών','https://www.yme.gov.gr/'],['Ελληνική Αστυνομία (διαβατήρια/ταυτότητες)','https://www.astynomia.gr/'],['Διαβατήρια','https://www.passport.gov.gr/']],[['100','Άμεση Δράση'],['112','Ευρωπαϊκός αριθμός έκτακτης ανάγκης']]],
  ['🗺️ Ακίνητα & Επιχειρήσεις',[['Ελληνικό Κτηματολόγιο','https://www.ktimatologio.gr/'],['ΓΕΜΗ','https://www.businessregistry.gr/']],[]]
 ];
-function rContacts(){const UC=window.KEP_UTIL_CONTACTS||[];$('#contactsBox').innerHTML=(UC.length?`<div class="card" style="grid-column:1/-1"><h3 style="margin-top:0">⚡💧📡 Ρεύμα, νερό, αέριο, τηλεφωνία — βλάβες & εξυπηρέτηση</h3><div class="grid g3">${UC.map(c=>`<div class="row">${c.tel?`<a class="btn sm" href="tel:${esc(String(c.tel).replace(/\s/g,''))}">📞 ${esc(c.tel)}</a>`:''}<span class="small">${c.url?`<a href="${esc(c.url)}" target="_blank" rel="noopener">${esc(c.org)} ↗</a>`:esc(c.org)}</span></div>`).join('')}</div></div>`:'')+CONTACTS.map(c=>`<div class="card"><h3 style="margin-top:0">${c[0]}</h3>${c[2].map(p=>`<div class="row" style="margin:4px 0"><a class="btn sm" href="tel:${p[0]}">📞 ${p[0]}</a><span class="small">${esc(p[1])}</span></div>`).join('')}<ul style="margin:8px 0 0;padding-left:18px">${c[1].map(l=>`<li><a href="${l[1]}" target="_blank" rel="noopener">${esc(l[0])} ↗</a></li>`).join('')}</ul></div>`).join('')+
+function rContacts(){const UC=window.KEP_UTIL_CONTACTS||[];$('#contactsBox').innerHTML=`<div style="grid-column:1/-1">${SIS_CARD}</div>`+(UC.length?`<div class="card" style="grid-column:1/-1"><h3 style="margin-top:0">⚡💧📡 Ρεύμα, νερό, αέριο, τηλεφωνία — βλάβες & εξυπηρέτηση</h3><div class="grid g3">${UC.map(c=>`<div class="row">${c.tel?`<a class="btn sm" href="tel:${esc(String(c.tel).replace(/\s/g,''))}">📞 ${esc(c.tel)}</a>`:''}<span class="small">${c.url?`<a href="${esc(c.url)}" target="_blank" rel="noopener">${esc(c.org)} ↗</a>`:esc(c.org)}</span></div>`).join('')}</div></div>`:'')+CONTACTS.map(c=>`<div class="card"><h3 style="margin-top:0">${c[0]}</h3>${c[2].map(p=>`<div class="row" style="margin:4px 0"><a class="btn sm" href="tel:${p[0]}">📞 ${p[0]}</a><span class="small">${esc(p[1])}</span></div>`).join('')}<ul style="margin:8px 0 0;padding-left:18px">${c[1].map(l=>`<li><a href="${l[1]}" target="_blank" rel="noopener">${esc(l[0])} ↗</a></li>`).join('')}</ul></div>`).join('')+
  `<div class="card"><h3 style="margin-top:0">🔎 Δεν το βρίσκεις;</h3><div class="muted small">Ψάξε κατευθείαν στον κατάλογο του gov.gr:</div><div class="sbox"><input id="govQ" placeholder="π.χ. άδεια αλιείας"><button class="btn" id="govGo">↗</button></div></div>`;
  $('#govGo').onclick=()=>window.open('https://www.gov.gr/search?q='+encodeURIComponent($('#govQ').value),'_blank','noopener')}
 
@@ -788,6 +792,7 @@ function openAg(id,keep){const a=AG.find(x=>x.id===id);if(!a)return;curAg=id;
    <div class="row" style="margin-top:10px">${a.links.map(l=>`<a class="btn sm" href="${l[1]}" target="_blank" rel="noopener">🌐 ${esc(l[0])} ↗</a>`).join('')}${a.tel.map(p=>`<a class="btn g sm" href="tel:${p[0]}">📞 ${p[0]} · ${esc(p[1])}</a>`).join('')}</div>${['energ','nero','tel'].includes(a.id)?`<div class="row" style="margin-top:8px">${(window.KEP_UTIL_CONTACTS||[]).filter(c=>c.tel&&({energ:/ΔΕΗ|ΔΕΔΔΗΕ|αέρ|Enaon|ΕΔΑ|ΡΑΑΕΥ|ρεύμ/i,nero:/ΕΥΔΑΠ|ΕΥΑΘ|ΔΕΥΑ|νερ/i,tel:/Cosmote|Vodafone|Nova|ΕΕΤΤ|ΟΤΕ|SMS|απάτ/i}[a.id]).test(c.org)).map(c=>`<a class="btn g sm" href="tel:${esc(String(c.tel).replace(/\s/g,''))}">📞 ${esc(c.tel)} · ${esc(c.org)}</a>`).join('')}</div>`:''}</div>
    ${a.id==='poly'&&window.KEP_ASPE?`<div class="card" style="margin-top:12px"><h3 style="margin-top:0">🏛️ ${esc(KEP_ASPE.name||'ΑΣΠΕ')}</h3><div class="small muted">${esc(KEP_ASPE.what||'')}</div><div class="row" style="margin-top:8px">${KEP_ASPE.url?`<a class="btn sm" href="${esc(KEP_ASPE.url)}" target="_blank" rel="noopener">🌐 Ιστοσελίδα ↗</a>`:''}${KEP_ASPE.tel?`<a class="btn g sm" href="tel:${esc(String(KEP_ASPE.tel).split(/[,/]/)[0].replace(/\s/g,''))}">📞 ${esc(KEP_ASPE.tel)}</a>`:''}${KEP_ASPE.email?`<a class="btn g sm" href="mailto:${esc(KEP_ASPE.email)}">✉️ ${esc(KEP_ASPE.email)}</a>`:''}</div>${KEP_ASPE.address?`<div class="tiny" style="margin-top:6px">📍 ${esc(KEP_ASPE.address)}</div>`:''}${KEP_ASPE.note?`<div class="notice" style="margin-top:8px">💡 ${esc(KEP_ASPE.note)}</div>`:''}</div>`:''}
    ${a.id==='poly'?(()=>{const N=(window.KEP_NEWS||[]).filter(n=>n.cat==='polyteknoi'||/πολυτεκν|τριτεκν/.test(norm(n.title+' '+n.body)));return N.length?`<h3>📰 Ενημερώσεις για πολύτεκνους (${N.length})</h3><div class="grid g2">${N.sort((x,y)=>String(y.date).localeCompare(String(x.date))).map(n=>`<div class="card news"><div class="row"><span class="d">${fmtD(n.date)}</span><div class="sp"></div><span class="st ${NST[n.status]||'done'}">${esc(n.status)}</span></div><b>${esc(n.title)}</b><div class="small muted">${esc(n.body)}</div>${n.amount?`<div class="small">💶 <b>${esc(n.amount)}</b></div>`:''}${n.url?`<a class="btn sm" style="margin-top:6px" href="${esc(n.url)}" target="_blank" rel="noopener">🌐 ↗</a>`:''}</div>`).join('')}</div>`:''})():''}
+   ${['dik','ktima','ydom','doy','trapeza','efka','dimos'].includes(a.id)?`<div class="row" style="margin-top:10px"><a class="btn g sm" href="${nomoURL({dik:'δικαστήριο',ktima:'κτηματολόγιο',ydom:'αυθαίρετα',doy:'φορολογικός',trapeza:'δάνειο',efka:'σύνταξη',dimos:'δήμος'}[a.id])}" target="_blank" rel="noopener">⚖️ Νομικό πλαίσιο στη ΝΟΜΟΠΥΞΙΔΑ ↗</a>${['ktima','ydom','dik','doy'].includes(a.id)?`<a class="btn g sm" href="${SIS.gk}" target="_blank" rel="noopener">🌾 ΓΗ &amp; ΚΛΗΡΟΝΟΜΙΑ ↗</a>`:''}</div>`:''}
    ${a.tools.length?`<h3>🧮 Κάν' το εδώ, τώρα</h3><div class="grid g2" id="agTools">${a.tools.map(t=>toolCard(t)).join('')}</div>`:''}
    <h3>📋 Υπηρεσίες του γκισέ (${L.length})</h3><input class="inp" id="agQ" placeholder="🔎 Φίλτρο σε αυτό το γκισέ" style="max-width:340px;margin-bottom:10px"><div class="grid g2" id="agList">${L.map(s=>card(s)).join('')}</div>`;
   if($('#agTools'))initTools($('#agTools'));
@@ -879,6 +884,22 @@ $('#fsDown').onclick=()=>{S.fs=Math.max(.85,Math.round(((S.fs||1)-.1)*10)/10);ap
 $('#fullBtn').onclick=()=>{const d=document;if(d.fullscreenElement||d.webkitFullscreenElement){(d.exitFullscreen||d.webkitExitFullscreen).call(d)}else{const el=d.documentElement;(el.requestFullscreen||el.webkitRequestFullscreen||function(){toast('Η πλήρης οθόνη δεν υποστηρίζεται εδώ')}).call(el)}};
 applyFs();
 
+/* ================= ΣΥΝΔΕΔΕΜΕΝΕΣ ΕΦΑΡΜΟΓΕΣ ================= */
+const SIS={nomo:'https://xomagr-eng.github.io/nomopyxida/',gk:'https://xomagr-eng.github.io/gi-klironomia-360/'};
+const GK_PROCS=[['disclaim',/αποποιη/],['will',/διαθηκ/],['inherit',/κληρονομ/],['gpar',/γονικ/],['donation',/δωρε/],['road',/διοδ|περικλειστ/],['servitude',/δουλει/],['boundaries',/οριοθετ|ορια ακιν|γεωμετρικ/],['legalize',/χρησικτησ|τακτοποιησ.*τιτλ/],['ktim-fix',/κτηματολ.*(διορθ|ανακριβ)|(διορθ|ανακριβ).*κτηματολ/],['ktim-first',/κτηματολ|δηλωση ιδιοκτησ/],['sale',/μεταβιβαση ακιν|φορου μεταβιβασ|φμα|αγοραπωλ/]];
+function gkProc(s){const t=s._t||norm(s.title);for(const[id,re]of GK_PROCS)if(re.test(t))return id;return null}
+const NOMO_STOP=new Set(['μέσω','online','ηλεκτρονική','ηλεκτρονικά','αίτηση','έκδοση','βεβαίωση','πιστοποιητικό','υπηρεσία','δήλωση','οδηγός','βήμα']);
+function nomoQ(s){const w=String(s.title).replace(/\([^)]*\)/g,' ').toLowerCase().split(/[^0-9a-zα-ωάέήίόύώϊϋΐΰ]+/i).filter(x=>x.length>=5&&!NOMO_STOP.has(x));return (w.slice(0,3).map(x=>x.length>6?x.slice(0,-2):x).join(' ')||String(s.title).toLowerCase())}
+function nomoURL(q){return SIS.nomo+'#q='+encodeURIComponent(q)}
+function gkURL(id,q){return SIS.gk+(id?'#proc='+id:(q?'#q='+encodeURIComponent(q):''))}
+function sisLinks(s){const p=gkProc(s);return `<a class="btn g" href="${nomoURL(nomoQ(s))}" target="_blank" rel="noopener">⚖️ Τι λέει ο νόμος · ΝΟΜΟΠΥΞΙΔΑ</a>${p?`<a class="btn g" href="${gkURL(p)}" target="_blank" rel="noopener">🌾 Βήμα-βήμα · ΓΗ &amp; ΚΛΗΡΟΝΟΜΙΑ</a>`:''}`}
+const SIS_CARD=`<div class="card" style="border-color:#5a4a9a"><h3 style="margin-top:0">🔗 Συνδεδεμένες εφαρμογές</h3><div class="grid g2">
+ <a class="card tile" style="text-decoration:none;color:inherit" href="${SIS.nomo}" target="_blank" rel="noopener"><span class="ic">⚖️</span><div><b>ΝΟΜΟΠΥΞΙΔΑ 360°</b><div class="muted small">Η πυξίδα σου στον νόμο: νομοθεσία, «έχω πρόβλημα», πρότυπα (εξώδικο, έγκληση, ενδικοφανής).</div></div></a>
+ <a class="card tile" style="text-decoration:none;color:inherit" href="${SIS.gk}" target="_blank" rel="noopener"><span class="ic">🌾</span><div><b>ΓΗ &amp; ΚΛΗΡΟΝΟΜΙΑ 360°</b><div class="muted small">Κτηματολόγιο, γονική/δωρεά, αγοραπωλησία, διαθήκη, κληρονομιά/αποποίηση, δίοδος, όρια, χρησικτησία — με υπολογιστές.</div></div></a>
+</div><div class="tiny" style="margin-top:6px">Κάθε υπηρεσία εδώ έχει κουμπί «⚖️ Τι λέει ο νόμος» και, όπου ταιριάζει, «🌾 Βήμα-βήμα» που ανοίγει απευθείας το σωστό θέμα.</div></div>`;
+function sisDeepLink(){const h=decodeURIComponent(location.hash.slice(1));const m=h.match(/^q=(.+)$/);if(m){go('services');$('#svcQ').value=m[1];rSvcList()}}
+window.addEventListener('hashchange',()=>{if(/^#q=/.test(location.hash))sisDeepLink()});
+
 /* ================= PROFILE ================= */
 function rProfile(){$('#profFields').innerHTML=PF.map(p=>`<label class="f">${p[1]}<input class="inp" data-p="${p[0]}" type="${p[2]||'text'}" value="${esc(S.profile[p[0]]||'')}"></label>`).join('')+
  `<label class="f">Επωνυμία γραφείου (ιδιωτικό ΚΕΠ)<input class="inp" data-p="office" value="${esc(S.profile.office||'')}"></label><label class="f">ΑΦΜ γραφείου<input class="inp" data-p="officeAfm" value="${esc(S.profile.officeAfm||'')}"></label>`}
@@ -893,7 +914,8 @@ $('#installBtn').onclick=async()=>{if(!deferred)return;deferred.prompt();await d
 if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('sw.js').catch(()=>{});
 
 /* ================= boot ================= */
-const start=(location.hash||'#home').slice(1);go(['home','news','agency','tools','services','life','forms','cases','office','dates','contacts','profile'].includes(start)?start:'home');
+const start=/^#q=/.test(location.hash)?'services':(location.hash||'#home').slice(1);if(/^#q=/.test(location.hash))setTimeout(sisDeepLink,0);
+go(['home','news','agency','tools','services','life','forms','cases','office','dates','contacts','profile'].includes(start)?start:'home');
 </script>
 </body>
 </html>
